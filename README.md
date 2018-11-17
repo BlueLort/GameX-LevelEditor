@@ -41,6 +41,7 @@ Video:
 6. Models collider are fixed AABB size at origin of models.(fix)
 7. AABB collider doesnt change on rotation.
 8. rotate camera using mouse not arrows.
+9. Random Generator needs some tweaks.
 
 #### if you know anything that might help me or improve the project email me emaranasr@gmail.com with subject "GameXLevelEditor Fix"
 
