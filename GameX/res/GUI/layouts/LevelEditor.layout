@@ -1,0 +1,945 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout version="4" >
+    <Window type="DefaultWindow" name="window_DefaultWindow" >
+        <Property name="Area" value="{{0,0},{0.00138889,1},{1,0},{1.00139,1}}" />
+        <Property name="MaxSize" value="{{1,0},{1,0}}" />
+        <Window type="AlfiskoSkin/FrameWindow" name="fmw_ModelStats" >
+            <Property name="Area" value="{{0,6},{0,4},{0.3,-122},{0.3,79}}" />
+            <Property name="Text" value="Model Stats" />
+            <Property name="Alpha" value="0.9" />
+            <Property name="TooltipText" value="Shows Model Stats like Position,Name,ID,Scale,Rotation..etc" />
+            <Property name="TitlebarFont" value="Jura-13" />
+            <Property name="SizingEnabled" value="false" />
+            <Property name="DragMovingEnabled" value="false" />
+            <Property name="CloseButtonEnabled" value="false" />
+            <AutoWindow namePath="__auto_titlebar__" >
+                <Property name="Font" value="Jura-13" />
+                <Property name="AlwaysOnTop" value="false" />
+                <Property name="TooltipText" value="Shows Model Stats like Position,Name,ID,Scale,Rotation..etc" />
+                <Property name="DraggingEnabled" value="false" />
+            </AutoWindow>
+            <AutoWindow namePath="__auto_closebutton__" >
+                <Property name="TooltipText" value="Shows Model Stats like Position,Name,ID,Scale,Rotation..etc" />
+            </AutoWindow>
+            <Window type="AlfiskoSkin/Button" name="but_remove" >
+                <Property name="ID" value="1" />
+                <Property name="Area" value="{{0,135},{0,224},{0,231},{0,249}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Remove" />
+                <Property name="TooltipText" value="Removes Target Model From Scene" />
+                <Property name="InheritsTooltipText" value="false" />
+                <Property name="AutoRenderingSurface" value="true" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_pos_x" >
+                <Property name="Area" value="{{0,40},{0,77},{0,88},{0,95}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_pos_y" >
+                <Property name="Area" value="{{0,108},{0,77},{0,156},{0,95}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_pos_z" >
+                <Property name="Area" value="{{0,176},{0,77},{0,224},{0,95}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="MaxTextLength" value="999999" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_scal_y" >
+                <Property name="Area" value="{{0,107},{0,123},{0,155},{0,141}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_scal_x" >
+                <Property name="Area" value="{{0,39},{0,123},{0,87},{0,141}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_scal_z" >
+                <Property name="Area" value="{{0,175},{0,123},{0,223},{0,141}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_rot_y" >
+                <Property name="Area" value="{{0,107},{0,166},{0,155},{0,184}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_rot_x" >
+                <Property name="Area" value="{{0,39},{0,166},{0,87},{0,184}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_rot_z" >
+                <Property name="Area" value="{{0,175},{0,166},{0,223},{0,184}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_name" >
+                <Property name="Area" value="{{0,12},{0,2},{0,63},{0,25}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Name:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="HorzFormatting" value="LeftAligned" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_type" >
+                <Property name="Area" value="{{0,12},{0,27},{0,231},{0,50}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Type:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="HorzFormatting" value="LeftAligned" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_pos" >
+                <Property name="Area" value="{{0,12},{0,51},{0,231},{0,74}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Position" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_scal" >
+                <Property name="Area" value="{{0,12},{0,96},{0,231},{0,119}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Scale" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_rot" >
+                <Property name="Area" value="{{0,12},{0,139},{0,231},{0,162}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Rotation" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Button" name="but_update" >
+                <Property name="ID" value="1" />
+                <Property name="Area" value="{{0,16},{0,224},{0,112},{0,249}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Update" />
+                <Property name="TooltipText" value="Updates Model Stats with Current Put Stats" />
+                <Property name="InheritsTooltipText" value="false" />
+                <Property name="AutoRenderingSurface" value="true" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_pos_x" >
+                <Property name="Area" value="{{0,20},{0,73},{0,38},{0,94}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="x:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_pos_y" >
+                <Property name="Area" value="{{0,89},{0,73},{0,107},{0,94}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="y:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_pos_z" >
+                <Property name="Area" value="{{0,157},{0,73},{0,175},{0,94}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="z:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_scal_z" >
+                <Property name="Area" value="{{0,156},{0,119},{0,174},{0,140}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="z:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_scal_x" >
+                <Property name="Area" value="{{0,20},{0,119},{0,38},{0,140}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="x:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="TooltipText" value="Shows Model Stats like Position,Name,ID,Scale,Rotation..etc" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_scal_y" >
+                <Property name="Area" value="{{0,89},{0,119},{0,107},{0,140}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="y:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="TooltipText" value="Shows Model Stats like Position,Name,ID,Scale,Rotation..etc" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_rot_z" >
+                <Property name="Area" value="{{0,156},{0,163},{0,174},{0,184}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="z:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_rot_x" >
+                <Property name="Area" value="{{0,19},{0,163},{0,37},{0,184}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="x:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_rot_y" >
+                <Property name="Area" value="{{0,88},{0,163},{0,106},{0,184}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="y:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Button" name="but_reset" >
+                <Property name="ID" value="1" />
+                <Property name="Area" value="{{0,75},{0,194},{0,171},{0,219}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Reset" />
+                <Property name="TooltipText" value="Resets Model Stats Values" />
+                <Property name="InheritsTooltipText" value="false" />
+                <Property name="AutoRenderingSurface" value="true" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_name" >
+                <Property name="Area" value="{{0,65},{0,3},{0,224},{0,26}}" />
+                <Property name="MaxTextLength" value="35" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+        </Window>
+        <Window type="AlfiskoSkin/FrameWindow" name="fmw_SaveLoad" >
+            <Property name="Area" value="{{0,9},{0,298},{0.3,-120},{0.3,255}}" />
+            <Property name="Text" value="Save/Load" />
+            <Property name="Alpha" value="0.9" />
+            <Property name="RollUpState" value="true" />
+            <Property name="TooltipText" value="Save or Load a Scene" />
+            <Property name="TitlebarFont" value="Jura-13" />
+            <Property name="SizingEnabled" value="false" />
+            <Property name="DragMovingEnabled" value="false" />
+            <Property name="CloseButtonEnabled" value="false" />
+            <AutoWindow namePath="__auto_titlebar__" >
+                <Property name="Font" value="Jura-13" />
+                <Property name="AlwaysOnTop" value="false" />
+                <Property name="TooltipText" value="Save or Load a Scene" />
+                <Property name="DraggingEnabled" value="false" />
+            </AutoWindow>
+            <AutoWindow namePath="__auto_closebutton__" >
+                <Property name="TooltipText" value="Save or Load a Scene" />
+            </AutoWindow>
+            <Window type="AlfiskoSkin/Button" name="but_save" >
+                <Property name="ID" value="1" />
+                <Property name="Area" value="{{0,131},{0,79},{0,227},{0,104}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Save" />
+                <Property name="TooltipText" value="Saves The Current Scene" />
+                <Property name="InheritsTooltipText" value="false" />
+                <Property name="AutoRenderingSurface" value="true" />
+            </Window>
+            <Window type="AlfiskoSkin/Button" name="but_load" >
+                <Property name="ID" value="1" />
+                <Property name="Area" value="{{0,13},{0,79},{0,109},{0,104}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Load" />
+                <Property name="TooltipText" value="Load The Specified Scene" />
+                <Property name="InheritsTooltipText" value="false" />
+                <Property name="AutoRenderingSurface" value="true" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="Label" >
+                <Property name="Area" value="{{0,9},{0,-3},{0,233},{0,29}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Enter File Name Directly" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="Label2" >
+                <Property name="Area" value="{{0,9},{0,12},{0,233},{0,44}}" />
+                <Property name="Text" value="(NOTE: Res. Folder is known)" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="TooltipText" value="Save or Load a Scene" />
+                <Property name="NormalTextColour" value="FF000000" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_fileName" >
+                <Property name="Area" value="{{0,9},{0,35},{0,243},{0,58}}" />
+                <Property name="MaxTextLength" value="35" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="Label22" >
+                <Property name="Area" value="{{0,13},{0,51},{0,237},{0,83}}" />
+                <Property name="Text" value="If File Exists ,It Will Be Overwritten" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="NormalTextColour" value="FFA10000" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Button" name="but_new" >
+                <Property name="ID" value="1" />
+                <Property name="Area" value="{{0,68},{0,108},{0,164},{0,133}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="New" />
+                <Property name="TooltipText" value="Make a New Empty Scene" />
+                <Property name="InheritsTooltipText" value="false" />
+                <Property name="AutoRenderingSurface" value="true" />
+            </Window>
+        </Window>
+        <Window type="AlfiskoSkin/FrameWindow" name="fmw_ModelEditor" >
+            <Property name="Area" value="{{0,1052},{0,13},{0.302344,890},{0.279167,119}}" />
+            <Property name="Font" value="Jura-10" />
+            <Property name="Text" value="Model Editor" />
+            <Property name="Alpha" value="0.9" />
+            <Property name="TitlebarFont" value="Jura-13" />
+            <Property name="SizingEnabled" value="false" />
+            <Property name="DragMovingEnabled" value="false" />
+            <Property name="CloseButtonEnabled" value="false" />
+            <AutoWindow namePath="__auto_titlebar__" >
+                <Property name="Font" value="Jura-13" />
+                <Property name="AlwaysOnTop" value="false" />
+                <Property name="DraggingEnabled" value="false" />
+            </AutoWindow>
+            <Window type="AlfiskoSkin/RadioButton" name="rdb_2_move" >
+                <Property name="Area" value="{{0.0094162,10},{0.14733,109},{0.0094162,68},{0.14733,141}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="Text" value="Move" />
+                <Property name="GroupID" value="2" />
+                <Property name="Selected" value="true" />
+            </Window>
+            <Window type="AlfiskoSkin/RadioButton" name="rdb_2_scale" >
+                <Property name="Area" value="{{0.0094162,78},{0.14733,109},{0.0094162,136},{0.14733,141}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="Text" value="Scale" />
+                <Property name="GroupID" value="2" />
+            </Window>
+            <Window type="AlfiskoSkin/RadioButton" name="rdb_2_rotate" >
+                <Property name="Area" value="{{0.0094162,144},{0.14733,109},{0.0094162,210},{0.14733,141}}" />
+                <Property name="Text" value="Rotate" />
+                <Property name="GroupID" value="2" />
+            </Window>
+            <Window type="AlfiskoSkin/Checkbox" name="chb_x" >
+                <Property name="Area" value="{{0.0094162,32},{0.14733,164},{0.0094162,66},{0.14733,196}}" />
+                <Property name="Text" value="X" />
+                <Property name="Selected" value="true" />
+                <Property name="TooltipText" value="Change On X-Axis" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Checkbox" name="chb_y" >
+                <Property name="Area" value="{{0.0094162,85},{0.14733,164},{0.0094162,120},{0.14733,196}}" />
+                <Property name="Text" value="Y" />
+                <Property name="Selected" value="true" />
+                <Property name="TooltipText" value="Change On Y-Axis" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Checkbox" name="chb_z" >
+                <Property name="Area" value="{{0.0094162,143},{0.14733,164},{0.0094162,178},{0.14733,196}}" />
+                <Property name="Text" value="Z" />
+                <Property name="Selected" value="true" />
+                <Property name="TooltipText" value="Change On Z-Axis" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_editxyz" >
+                <Property name="Area" value="{{0.0094162,46},{0.14733,146},{0.0094162,165},{0.14733,160}}" />
+                <Property name="Text" value="Edit on xyz?" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            </Window>
+            <Window type="Vanilla/Combobox" name="cmb_models" >
+                <Property name="Area" value="{{0.0282486,9},{-0.852426,236},{0.0235405,200},{-0.0164846,218}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="Text" value="Models" />
+                <Property name="ReadOnly" value="true" />
+                <Property name="ForceVertScrollbar" value="true" />
+                <Property name="InheritsTooltipText" value="false" />
+                <Property name="ActiveEditSelectionColour" value="tl:FFB6D142 tr:FFB6D142 bl:FFB6D142 br:FFB6D142" />
+                <AutoWindow namePath="__auto_editbox__" >
+                    <Property name="Font" value="Jura-10" />
+                    <Property name="Text" value="Models" />
+                    <Property name="ReadOnly" value="true" />
+                    <Property name="ActiveSelectionColour" value="tl:FFB6D142 tr:FFB6D142 bl:FFB6D142 br:FFB6D142" />
+                </AutoWindow>
+                <AutoWindow namePath="__auto_droplist__" >
+                    <Property name="Font" value="Jura-10" />
+                    <AutoWindow namePath="__auto_hscrollbar__" >
+                        <AutoWindow namePath="__auto_incbtn__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                        <AutoWindow namePath="__auto_decbtn__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                        <AutoWindow namePath="__auto_thumb__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                    </AutoWindow>
+                    <AutoWindow namePath="__auto_vscrollbar__" >
+                        <AutoWindow namePath="__auto_incbtn__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                        <AutoWindow namePath="__auto_decbtn__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                        <AutoWindow namePath="__auto_thumb__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                    </AutoWindow>
+                </AutoWindow>
+                <AutoWindow namePath="__auto_button__" >
+                    <Property name="HoverImage" value="Vanilla-Images/DropDownButtonHover" />
+                    <Property name="NormalImage" value="Vanilla-Images/DropDownButtonNormal" />
+                    <Property name="PushedImage" value="Vanilla-Images/DropDownButtonPushed" />
+                </AutoWindow>
+            </Window>
+            <Window type="AlfiskoSkin/Button" name="but_place" >
+                <Property name="ID" value="1" />
+                <Property name="Area" value="{{0,58},{0,121},{0,154},{0,143}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Place" />
+                <Property name="TooltipText" value="Place Selected Model into Scene origin" />
+                <Property name="InheritsTooltipText" value="false" />
+                <Property name="AutoRenderingSurface" value="true" />
+            </Window>
+            <Window type="Vanilla/Combobox" name="cmb_textures" >
+                <Property name="Area" value="{{0.0282486,10},{-0.852426,298},{0.0235405,200},{-0.0164846,228}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="Text" value="Textures" />
+                <Property name="ReadOnly" value="true" />
+                <Property name="ForceVertScrollbar" value="true" />
+                <Property name="InheritsTooltipText" value="false" />
+                <Property name="ActiveEditSelectionColour" value="tl:FFB6D142 tr:FFB6D142 bl:FFB6D142 br:FFB6D142" />
+                <AutoWindow namePath="__auto_editbox__" >
+                    <Property name="Font" value="Jura-10" />
+                    <Property name="Text" value="Textures" />
+                    <Property name="ReadOnly" value="true" />
+                    <Property name="ActiveSelectionColour" value="tl:FFB6D142 tr:FFB6D142 bl:FFB6D142 br:FFB6D142" />
+                </AutoWindow>
+                <AutoWindow namePath="__auto_droplist__" >
+                    <Property name="Font" value="Jura-10" />
+                    <AutoWindow namePath="__auto_hscrollbar__" >
+                        <AutoWindow namePath="__auto_incbtn__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                        <AutoWindow namePath="__auto_decbtn__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                        <AutoWindow namePath="__auto_thumb__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                    </AutoWindow>
+                    <AutoWindow namePath="__auto_vscrollbar__" >
+                        <AutoWindow namePath="__auto_incbtn__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                        <AutoWindow namePath="__auto_decbtn__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                        <AutoWindow namePath="__auto_thumb__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                    </AutoWindow>
+                </AutoWindow>
+                <AutoWindow namePath="__auto_button__" >
+                    <Property name="HoverImage" value="Vanilla-Images/DropDownButtonHover" />
+                    <Property name="NormalImage" value="Vanilla-Images/DropDownButtonNormal" />
+                    <Property name="PushedImage" value="Vanilla-Images/DropDownButtonPushed" />
+                </AutoWindow>
+            </Window>
+            <Window type="Vanilla/Combobox" name="cmb_shaders" >
+                <Property name="Area" value="{{0.0282486,10},{-0.852426,266},{0.0235405,200},{-0.0164846,228}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="Text" value="Shaders" />
+                <Property name="ReadOnly" value="true" />
+                <Property name="ForceVertScrollbar" value="true" />
+                <Property name="InheritsTooltipText" value="false" />
+                <Property name="ActiveEditSelectionColour" value="tl:FFB6D142 tr:FFB6D142 bl:FFB6D142 br:FFB6D142" />
+                <AutoWindow namePath="__auto_editbox__" >
+                    <Property name="Font" value="Jura-10" />
+                    <Property name="Text" value="Shaders" />
+                    <Property name="ReadOnly" value="true" />
+                    <Property name="ActiveSelectionColour" value="tl:FFB6D142 tr:FFB6D142 bl:FFB6D142 br:FFB6D142" />
+                </AutoWindow>
+                <AutoWindow namePath="__auto_droplist__" >
+                    <Property name="Font" value="Jura-10" />
+                    <AutoWindow namePath="__auto_hscrollbar__" >
+                        <AutoWindow namePath="__auto_incbtn__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                        <AutoWindow namePath="__auto_decbtn__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                        <AutoWindow namePath="__auto_thumb__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                    </AutoWindow>
+                    <AutoWindow namePath="__auto_vscrollbar__" >
+                        <AutoWindow namePath="__auto_incbtn__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                        <AutoWindow namePath="__auto_decbtn__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                        <AutoWindow namePath="__auto_thumb__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                    </AutoWindow>
+                </AutoWindow>
+                <AutoWindow namePath="__auto_button__" >
+                    <Property name="HoverImage" value="Vanilla-Images/DropDownButtonHover" />
+                    <Property name="NormalImage" value="Vanilla-Images/DropDownButtonNormal" />
+                    <Property name="PushedImage" value="Vanilla-Images/DropDownButtonPushed" />
+                </AutoWindow>
+            </Window>
+            <Window type="AlfiskoSkin/Checkbox" name="chb_geoShader" >
+                <Property name="Area" value="{{0,22},{0,90},{0,170},{0,122}}" />
+                <Property name="Text" value="Geometry Shader" />
+            </Window>
+            <Window type="AlfiskoSkin/Checkbox" name="chb_wfmode" >
+                <Property name="Area" value="{{0,47},{0,241},{0,175},{0,268}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="Text" value="Wireframe Mode" />
+                <Property name="TooltipText" value="Shows Model Stats like Position,Name,ID,Scale,Rotation..etc" />
+            </Window>
+        </Window>
+        <Window type="AlfiskoSkin/FrameWindow" name="fmw_projLights" >
+            <Property name="Area" value="{{0,1035},{0,327},{0.3,894},{0.3,484}}" />
+            <Property name="Text" value="Projection &amp; Light" />
+            <Property name="Alpha" value="0.9" />
+            <Property name="TooltipText" value="Shows Model Stats like Position,Name,ID,Scale,Rotation..etc" />
+            <Property name="TitlebarFont" value="Jura-13" />
+            <Property name="SizingEnabled" value="false" />
+            <Property name="DragMovingEnabled" value="false" />
+            <Property name="CloseButtonEnabled" value="false" />
+            <AutoWindow namePath="__auto_titlebar__" >
+                <Property name="Font" value="Jura-13" />
+                <Property name="AlwaysOnTop" value="false" />
+                <Property name="TooltipText" value="Shows Model Stats like Position,Name,ID,Scale,Rotation..etc" />
+                <Property name="DraggingEnabled" value="false" />
+            </AutoWindow>
+            <AutoWindow namePath="__auto_closebutton__" >
+                <Property name="TooltipText" value="Shows Model Stats like Position,Name,ID,Scale,Rotation..etc" />
+            </AutoWindow>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_fov" >
+                <Property name="Area" value="{{0,44},{0,19},{0,107},{0,37}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_dir_y" >
+                <Property name="Area" value="{{0,98},{0,84},{0,146},{0,102}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_dir_x" >
+                <Property name="Area" value="{{0,30},{0,84},{0,78},{0,102}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_dir_z" >
+                <Property name="Area" value="{{0,166},{0,84},{0,214},{0,102}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_projection" >
+                <Property name="Area" value="{{0,0},{0,-3},{0,219},{0,20}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Projection" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_dir_light" >
+                <Property name="Area" value="{{0,1},{0,61},{0,220},{0,84}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Directional light" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_pLight" >
+                <Property name="Area" value="{{0,-1},{0,136},{0,218},{0,159}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Point Light" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_fov" >
+                <Property name="Area" value="{{0,7},{0,16},{0,42},{0,37}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="FOV:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_dir_z" >
+                <Property name="Area" value="{{0,146},{0,83},{0,164},{0,104}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="z:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_dir_x" >
+                <Property name="Area" value="{{0,10},{0,83},{0,28},{0,104}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="x:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="TooltipText" value="Shows Model Stats like Position,Name,ID,Scale,Rotation..etc" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_dir_y" >
+                <Property name="Area" value="{{0,79},{0,83},{0,97},{0,104}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="y:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="TooltipText" value="Shows Model Stats like Position,Name,ID,Scale,Rotation..etc" />
+            </Window>
+            <Window type="AlfiskoSkin/Button" name="but_update" >
+                <Property name="ID" value="1" />
+                <Property name="Area" value="{{0,61},{0,110},{0,157},{0,135}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Update" />
+                <Property name="TooltipText" value="update settings" />
+                <Property name="InheritsTooltipText" value="false" />
+                <Property name="AutoRenderingSurface" value="true" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_near" >
+                <Property name="Area" value="{{0,-1},{0,39},{0,41},{0,60}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Near:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_near" >
+                <Property name="Area" value="{{0,45},{0,41},{0,106},{0,59}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_far" >
+                <Property name="Area" value="{{0,109},{0,39},{0,142},{0,60}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Far:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_far" >
+                <Property name="Area" value="{{0,145},{0,41},{0,210},{0,59}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_constant" >
+                <Property name="Area" value="{{0,-1},{0,158},{0,67},{0,179}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="Text" value="Constant:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_constant" >
+                <Property name="Area" value="{{0,70},{0,161},{0,166},{0,179}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_linear" >
+                <Property name="Area" value="{{0,19},{0,181},{0,67},{0,202}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="Text" value="Linear:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_quadratic" >
+                <Property name="Area" value="{{0,70},{0,208},{0,167},{0,226}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_linear" >
+                <Property name="Area" value="{{0,69},{0,183},{0,166},{0,201}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_quadratic" >
+                <Property name="Area" value="{{0,-1},{0,204},{0,67},{0,225}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="Text" value="Quadratic:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Button" name="but_place" >
+                <Property name="ID" value="1" />
+                <Property name="Area" value="{{0,65},{0,308},{0,161},{0,333}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Place" />
+                <Property name="TooltipText" value="update settings" />
+                <Property name="InheritsTooltipText" value="false" />
+                <Property name="AutoRenderingSurface" value="true" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_constant2" >
+                <Property name="Area" value="{{0,2},{0,234},{0,70},{0,255}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="Text" value="Ambient" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_quadratic2" >
+                <Property name="Area" value="{{0,1},{0,285},{0,69},{0,306}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="Text" value="Specular" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_linear2" >
+                <Property name="Area" value="{{0,17},{0,259},{0,65},{0,280}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="Text" value="Diffuse" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_amb_r" >
+                <Property name="Area" value="{{0,72},{0,239},{0,86},{0,253}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="r:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="TooltipText" value="Shows Model Stats like Position,Name,ID,Scale,Rotation..etc" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_amb_r" >
+                <Property name="Area" value="{{0,87},{0,236},{0,120},{0,253}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_amb_g" >
+                <Property name="Area" value="{{0,137},{0,236},{0,170},{0,252}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_amb_g" >
+                <Property name="Area" value="{{0,122},{0,238},{0,136},{0,252}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="Text" value="g:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="TooltipText" value="Shows Model Stats like Position,Name,ID,Scale,Rotation..etc" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_amb_b" >
+                <Property name="Area" value="{{0,190},{0,236},{0,222},{0,252}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_amb_b" >
+                <Property name="Area" value="{{0,175},{0,237},{0,189},{0,251}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="Text" value="b:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="TooltipText" value="Shows Model Stats like Position,Name,ID,Scale,Rotation..etc" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_diff_b" >
+                <Property name="Area" value="{{0,189},{0,259},{0,222},{0,275}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_diff_b" >
+                <Property name="Area" value="{{0,174},{0,261},{0,188},{0,275}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="Text" value="b:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="TooltipText" value="Shows Model Stats like Position,Name,ID,Scale,Rotation..etc" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_diff_r" >
+                <Property name="Area" value="{{0,86},{0,260},{0,120},{0,277}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_diff_r" >
+                <Property name="Area" value="{{0,71},{0,263},{0,85},{0,277}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="r:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="TooltipText" value="Shows Model Stats like Position,Name,ID,Scale,Rotation..etc" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_diff_g" >
+                <Property name="Area" value="{{0,136},{0,260},{0,170},{0,276}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_diff_g" >
+                <Property name="Area" value="{{0,121},{0,262},{0,135},{0,276}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="Text" value="g:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="TooltipText" value="Shows Model Stats like Position,Name,ID,Scale,Rotation..etc" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_spec_b" >
+                <Property name="Area" value="{{0,189},{0,284},{0,222},{0,300}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_spec_b" >
+                <Property name="Area" value="{{0,174},{0,286},{0,188},{0,300}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="Text" value="b:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="TooltipText" value="Shows Model Stats like Position,Name,ID,Scale,Rotation..etc" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_spec_r" >
+                <Property name="Area" value="{{0,86},{0,285},{0,120},{0,302}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_spec_r" >
+                <Property name="Area" value="{{0,71},{0,288},{0,85},{0,302}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="r:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="TooltipText" value="Shows Model Stats like Position,Name,ID,Scale,Rotation..etc" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_spec_g" >
+                <Property name="Area" value="{{0,135},{0,285},{0,169},{0,301}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_spec_g" >
+                <Property name="Area" value="{{0,121},{0,287},{0,135},{0,301}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="Text" value="g:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="TooltipText" value="Shows Model Stats like Position,Name,ID,Scale,Rotation..etc" />
+            </Window>
+        </Window>
+        <Window type="AlfiskoSkin/FrameWindow" name="fmw_TerrainSettings" >
+            <Property name="Area" value="{{0,9},{0,329},{0.3,-120},{0.3,376}}" />
+            <Property name="Text" value="Terrain Settings" />
+            <Property name="Alpha" value="0.9" />
+            <Property name="TooltipText" value="Plane / Water Settings" />
+            <Property name="TitlebarFont" value="Jura-13" />
+            <Property name="SizingEnabled" value="false" />
+            <Property name="DragMovingEnabled" value="false" />
+            <Property name="CloseButtonEnabled" value="false" />
+            <AutoWindow namePath="__auto_titlebar__" >
+                <Property name="Font" value="Jura-13" />
+                <Property name="AlwaysOnTop" value="false" />
+                <Property name="TooltipText" value="Save or Load a Scene" />
+                <Property name="DraggingEnabled" value="false" />
+            </AutoWindow>
+            <AutoWindow namePath="__auto_closebutton__" >
+                <Property name="TooltipText" value="Save or Load a Scene" />
+            </AutoWindow>
+            <Window type="AlfiskoSkin/Button" name="but_genRndPlane" >
+                <Property name="ID" value="1" />
+                <Property name="Area" value="{{0,8},{0,78},{0,217},{0,103}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Generate Random Plane" />
+                <Property name="TooltipText" value="Updates Model Stats with Current Put Stats" />
+                <Property name="InheritsTooltipText" value="false" />
+                <Property name="AutoRenderingSurface" value="true" />
+            </Window>
+            <Window type="AlfiskoSkin/Button" name="but_genPlane" >
+                <Property name="ID" value="1" />
+                <Property name="Area" value="{{0,11},{0,142},{0,164},{0,167}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Generate Plane" />
+                <Property name="TooltipText" value="Updates Model Stats with Current Put Stats" />
+                <Property name="InheritsTooltipText" value="false" />
+                <Property name="AutoRenderingSurface" value="true" />
+            </Window>
+            <Window type="Vanilla/Combobox" name="cmb_heightMaps" >
+                <Property name="Area" value="{{0.0282486,2},{-0.852426,307},{0.0235405,215},{-0.0164846,229}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="Text" value="Height Maps" />
+                <Property name="ReadOnly" value="true" />
+                <Property name="ForceVertScrollbar" value="true" />
+                <Property name="InheritsTooltipText" value="false" />
+                <Property name="ActiveEditSelectionColour" value="tl:FFB6D142 tr:FFB6D142 bl:FFB6D142 br:FFB6D142" />
+                <AutoWindow namePath="__auto_editbox__" >
+                    <Property name="Font" value="Jura-10" />
+                    <Property name="Text" value="Height Maps" />
+                    <Property name="ReadOnly" value="true" />
+                    <Property name="ActiveSelectionColour" value="tl:FFB6D142 tr:FFB6D142 bl:FFB6D142 br:FFB6D142" />
+                </AutoWindow>
+                <AutoWindow namePath="__auto_droplist__" >
+                    <Property name="Font" value="Jura-10" />
+                    <AutoWindow namePath="__auto_hscrollbar__" >
+                        <AutoWindow namePath="__auto_incbtn__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                        <AutoWindow namePath="__auto_decbtn__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                        <AutoWindow namePath="__auto_thumb__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                    </AutoWindow>
+                    <AutoWindow namePath="__auto_vscrollbar__" >
+                        <AutoWindow namePath="__auto_incbtn__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                        <AutoWindow namePath="__auto_decbtn__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                        <AutoWindow namePath="__auto_thumb__" >
+                            <Property name="RestoreOldCapture" value="true" />
+                        </AutoWindow>
+                    </AutoWindow>
+                </AutoWindow>
+                <AutoWindow namePath="__auto_button__" >
+                    <Property name="HoverImage" value="Vanilla-Images/DropDownButtonHover" />
+                    <Property name="NormalImage" value="Vanilla-Images/DropDownButtonNormal" />
+                    <Property name="PushedImage" value="Vanilla-Images/DropDownButtonPushed" />
+                </AutoWindow>
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_width" >
+                <Property name="Area" value="{{0,44},{0,4},{0,107},{0,25}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Width:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_width" >
+                <Property name="Area" value="{{0,113},{0,3},{0,201},{0,23}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_depth" >
+                <Property name="Area" value="{{0,114},{0,28},{0,202},{0,48}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_depth" >
+                <Property name="Area" value="{{0,43},{0,29},{0,106},{0,50}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Depth:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Checkbox" name="chb_hidePlane" >
+                <Property name="Area" value="{{0,11},{0,171},{0,138},{0,192}}" />
+                <Property name="Text" value="Hide Plane" />
+                <Property name="TooltipText" value="Plane / Water Settings" />
+            </Window>
+            <Window type="AlfiskoSkin/Checkbox" name="chb_hideWater" >
+                <Property name="Area" value="{{0,11},{0,192},{0,139},{0,216}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="Text" value="Hide Water" />
+                <Property name="TooltipText" value="Plane / Water Settings" />
+            </Window>
+            <Window type="AlfiskoSkin/Editbox" name="ebx_maxHeight" >
+                <Property name="Area" value="{{0,114},{0,53},{0,202},{0,73}}" />
+                <Property name="Font" value="Jura-10" />
+                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+            <Window type="AlfiskoSkin/Label" name="lab_maxHeight" >
+                <Property name="Area" value="{{0,10},{0,51},{0,111},{0,72}}" />
+                <Property name="Font" value="Jura-13" />
+                <Property name="Text" value="Max Height:" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="InheritsTooltipText" value="false" />
+            </Window>
+        </Window>
+    </Window>
+</GUILayout>

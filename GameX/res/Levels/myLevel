@@ -1,0 +1,29 @@
+<General SCR_WIDTH=1280.000 SCR_HEIGHT=720.000 FOV=45.000 zNear=0.100 zFar=400.000 />
+
+<Terrain width=64.000 depth=64.000 maxHeight=8.000 heightMap=res/Levels/RandomGenerator_H_Map.bmp />
+
+<PhysicalObject Name="Box_2" Type=Box
+ diffTex="res/Textures/Box/brickwall.jpg"
+ normTex="res/Textures/Box/brickwall_normal.jpg"
+ specTex="res/Textures/Default/NO_SPECMAP.png"
+ vertexSh="Shaders/Default/Box/normBox.vs" fragmentSh="Shaders/Default/Box/normBox.frag" geometrySh="NONE"
+ posX=-0.389 posY=0.194 posZ=0.042
+ rotX=45.000 rotY=0.000 rotZ=0.000
+ scalX=1.000 scalY=1.000 scalZ=1.000 />
+
+<Light Name="Lamp_0" Type=Lamp
+ posX=-1.049 posY=0.090 posZ=-1.816
+ constant=1.000 linear=0.036 quadratic=0.090
+ ambR=0.122 ambG=0.122 ambB=0.122
+ diffR=0.400 diffG=0.400 diffB=0.400
+ specR=0.502 specG=0.502 specB=0.502 />
+
+<PhysicalObject Name="Box_0" Type=Box
+ diffTex="res/Textures/Default/COLOR_WHITE.png"
+ normTex="res/Textures/Default/NO_NORMALMAP.png"
+ specTex="res/Textures/Default/NO_SPECMAP.png"
+ vertexSh="Shaders/Default/Box/Box.vs" fragmentSh="Shaders/Default/Box/Box.frag" geometrySh="NONE"
+ posX=1.195 posY=0.552 posZ=0.225
+ rotX=0.000 rotY=0.000 rotZ=0.000
+ scalX=1.000 scalY=1.000 scalZ=1.000 />
+
