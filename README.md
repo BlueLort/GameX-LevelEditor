@@ -42,7 +42,7 @@ Video:[GameX Level Editor](https://youtu.be/fzyXdtUfvCo).
 7. AABB collider doesnt change on rotation.
 8. rotate camera using mouse not arrows.
 9. Random Generator needs some tweaks.
-
+10. Multithreading for Assimp and Heavy Tasks like generating random terrain.
 #### if you know anything that might help me or improve the project email me emaranasr@gmail.com with subject "GameXLevelEditor Fix"
 
 ## WHY THIS PROJECT IS NOT FULLY DONE ?
