@@ -2,7 +2,7 @@
 #### 3D Level Editor in C++ using OpenGL 3.3 - SDL2.0 - CEGUI 0.8.5
 Video:
 
-## I couldn't do this project without: 
+## I COULD NOT DO THIS PROJECT WITHOUT 
 
 1. Joey de Vries (Learnopengl.com)
    - i couldn't understand how to use opengl without learnopengl.com
