@@ -609,10 +609,8 @@ void GameSystem::processInput(float DeltaTime)
 					_camera->ProcessKeyboard(Camera_Movement::RIGHT, DeltaTime);
 				}
 
-				int x, y;
-				SDL_GetMouseState(&x, &y);
 
-				/*
+				
 				if (_inputKeeper->isKeyHeld(SDLK_UP)) {
 					_camera->ProcessMouseMovement(0.0f, 585.0f*DeltaTime);
 				}
@@ -625,11 +623,13 @@ void GameSystem::processInput(float DeltaTime)
 				if (_inputKeeper->isKeyHeld(SDLK_RIGHT)) {
 					_camera->ProcessMouseMovement(585.0f*DeltaTime, 0.0f);
 				}
-				*/
 				
-				if (_inputKeeper->isKeyHeld(SDLK_LSHIFT))
+				
+				if (_inputKeeper->isKeyHeld(SDLK_LSHIFT)|| _inputKeeper->isKeyHeld(SDL_BUTTON_RIGHT))
 				{
-					_camera->ProcessMouseMovement(x, y, DeltaTime);
+					glm::vec2 mousePos=_inputKeeper->getMousePosition();
+					SDL_WarpMouseInWindow(_window, mousePos.x, mousePos.y);
+					_camera->ProcessMouseMovement(mousePos.x, mousePos.y, DeltaTime);
 				}
 				else
 				{
