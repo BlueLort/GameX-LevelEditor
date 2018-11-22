@@ -397,7 +397,7 @@ void GameSystem::readDefaultSettings(std::string fData)
 	std::regex_search(fData, match, reg);
 	clearColor.r = std::stof(match.str(1)) / 255.0f;
 	clearColor.g = std::stof(match.str(2)) / 255.0f;
-	clearColor.b= std::stof(match.str(3)) / 255.0f;
+	clearColor.b= std::stof(match.str(3))  / 255.0f;
 	clearColor.a = std::stof(match.str(4)) / 255.0f;
 	reg = std::regex("<Projection FOV=(.*?) zNear=(.*?) zFar=(.*?)/>");
 	std::regex_search(fData, match, reg);
@@ -608,6 +608,11 @@ void GameSystem::processInput(float DeltaTime)
 				if (_inputKeeper->isKeyHeld(SDLK_d)) {
 					_camera->ProcessKeyboard(Camera_Movement::RIGHT, DeltaTime);
 				}
+
+				int x, y;
+				SDL_GetMouseState(&x, &y);
+
+				/*
 				if (_inputKeeper->isKeyHeld(SDLK_UP)) {
 					_camera->ProcessMouseMovement(0.0f, 585.0f*DeltaTime);
 				}
@@ -619,6 +624,16 @@ void GameSystem::processInput(float DeltaTime)
 				}
 				if (_inputKeeper->isKeyHeld(SDLK_RIGHT)) {
 					_camera->ProcessMouseMovement(585.0f*DeltaTime, 0.0f);
+				}
+				*/
+				
+				if (_inputKeeper->isKeyHeld(SDLK_LSHIFT))
+				{
+					_camera->ProcessMouseMovement(x, y, DeltaTime);
+				}
+				else
+				{
+					_camera->reset();
 				}
 			}
 	}

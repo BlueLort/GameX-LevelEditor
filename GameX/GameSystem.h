@@ -58,8 +58,6 @@ private:
 	Shader* skyboxSh = nullptr;
 	Box* skyboxCube = nullptr;
 
-
-
 	ModelSelector * _modelSelector;
 	InputKeeper * _inputKeeper;
 	Camera* _camera;
@@ -95,9 +93,6 @@ private:
 	void renderScene();
 	void renderSkybox();
 	void renderSelectedObject();
-
-	
-	
 
 	//MOUSE PICKING FUNCTIONS
 	//-------------------------
@@ -150,8 +145,6 @@ private:
 	bool removeOnAction(const CEGUI::EventArgs& e);
 	void removeLight(PointLight * p);
 	bool resetOnAction(const CEGUI::EventArgs& e);
-
-
 	
 	//---------------------------
 	//MODEL Editor

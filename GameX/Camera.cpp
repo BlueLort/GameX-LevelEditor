@@ -12,6 +12,7 @@ Camera Camera::cameraInstance = Camera();
 	Yaw = yaw;
 	Pitch = pitch;
 	updateCameraVectors();
+	firstTime = true;
 }
 
 // Constructor with scalar values
@@ -23,6 +24,7 @@ Camera Camera::cameraInstance = Camera();
 	Yaw = yaw;
 	Pitch = pitch;
 	updateCameraVectors();
+	firstTime = true;
 }
 
 // Returns the view matrix calculated using Euler Angles and the LookAt Matrix
@@ -58,13 +60,24 @@ glm::vec3 Camera::getPosition() { return Position; }
 
 // Processes input received from a mouse input system. Expects the offset value in both the x and y direction.
 
- void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch)
+ void Camera::ProcessMouseMovement(float x, float y, float deltaTime, GLboolean constrainPitch)
 {
-	xoffset *= MouseSensitivity;
-	yoffset *= MouseSensitivity;
 
-	Yaw += xoffset;
-	Pitch += yoffset;
+	 if (firstTime)
+	 {
+		 lastX = x;
+		 lastY = y;
+		 firstTime = false;
+	 }
+
+	float xoffset = (x - lastX) * MouseSensitivity;
+	float yoffset = (lastY - y) * MouseSensitivity;
+
+	Yaw   += xoffset * deltaTime;
+	Pitch += yoffset * deltaTime;
+
+	lastX = x;
+	lastY = y;
 
 	// Make sure that when pitch is out of bounds, screen doesn't get flipped
 	if (constrainPitch)
@@ -90,6 +103,11 @@ glm::vec3 Camera::getPosition() { return Position; }
 	if (Zoom >= 45.0f)
 		Zoom = 45.0f;
 }
+
+ void Camera::reset()
+ {
+	 firstTime = true;
+ }
 
 float Camera::getYaw() { return Yaw; }
 
@@ -121,7 +139,7 @@ void Camera::setPitch(float newPitch) { Pitch = newPitch; }
  void Camera::update()
  {
 	 camView = glm::lookAt(Position, Position + Front, Up);
-	 camProj=glm::perspective(glm::radians(this->Zoom), (float)Window_Width / (float)Window_Height, zNear, zFar);
+	 camProj = glm::perspective(glm::radians(this->Zoom), (float)Window_Width / (float)Window_Height, zNear, zFar);
  }
 
 
