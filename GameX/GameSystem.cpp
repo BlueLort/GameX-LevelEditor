@@ -12,10 +12,8 @@ GameSystem::~GameSystem()
 
 void GameSystem::run()
 {
-
-
-
 	initSystem();
+	ASearch();
 	gameLoop();
 }
 
@@ -609,8 +607,10 @@ void GameSystem::processInput(float DeltaTime)
 					_camera->ProcessKeyboard(Camera_Movement::RIGHT, DeltaTime);
 				}
 
+				int x, y;
+				SDL_GetMouseState(&x, &y);
 
-				
+				/*
 				if (_inputKeeper->isKeyHeld(SDLK_UP)) {
 					_camera->ProcessMouseMovement(0.0f, 585.0f*DeltaTime);
 				}
@@ -623,13 +623,11 @@ void GameSystem::processInput(float DeltaTime)
 				if (_inputKeeper->isKeyHeld(SDLK_RIGHT)) {
 					_camera->ProcessMouseMovement(585.0f*DeltaTime, 0.0f);
 				}
+				*/
 				
-				
-				if (_inputKeeper->isKeyHeld(SDLK_LSHIFT)|| _inputKeeper->isKeyHeld(SDL_BUTTON_RIGHT))
+				if (_inputKeeper->isKeyHeld(SDLK_LSHIFT))
 				{
-					glm::vec2 mousePos=_inputKeeper->getMousePosition();
-					SDL_WarpMouseInWindow(_window, mousePos.x, mousePos.y);
-					_camera->ProcessMouseMovement(mousePos.x, mousePos.y, DeltaTime);
+					_camera->ProcessMouseMovement(x, y, DeltaTime);
 				}
 				else
 				{
@@ -730,6 +728,7 @@ void GameSystem::renderGame()
 	for (PhysicalObject* p : GameObjects) {
 		p->draw();
 	}
+
 	if (_selectedObject != nullptr) {
 		renderSelectedObject();
 		//draw kind of mask around selected object instad of using stencil buffer
@@ -740,12 +739,7 @@ void GameSystem::renderGame()
 	if (skyboxCube != nullptr) {
 		renderSkybox();
 	}
-	
-	
-	
 
-
-	
 }
 
 void GameSystem::renderGameSimplified(Shader* sh)
@@ -888,6 +882,40 @@ void GameSystem::renderSelectedObject()
 }
 
 
+void GameSystem::ASearch()
+{
+	/*
+		node : i am using the vertices and the indices generate from the shpere
+		as the data for the nav mesh
+	*/
+	Sphere* sphere = new Sphere();
+
+	std::vector<glm::vec3> vertices;
+	vertices.reserve(sphere->getVertices().size());
+
+	for (const auto& vertex : sphere->getVertices())
+	{
+		vertices.emplace_back(vertex.position);
+	}
+
+	const std::vector<unsigned int>& indices = sphere->getIndices();
+
+	NavMesh* navMesh = new NavMesh();
+	navMesh->Generate(vertices, indices);
+
+	HENode* start = navMesh->GetNodes().front();
+	HENode* end = navMesh->GetNodes().back();
+
+	std::vector<HENode*> path = navMesh->FindPath(start, end);
+	std::cout << glm::length(start->GetPosition() - end->GetPosition()) << std::endl;
+
+	for (const auto& node : path)
+	{
+		glm::vec3 pos = node->GetPosition();
+		std::cout << "(" << pos.x << ", " << pos.y << ", " << pos.z << ")\n";
+	}
+
+}
 
 void GameSystem::ObjectOnDragging()
 {

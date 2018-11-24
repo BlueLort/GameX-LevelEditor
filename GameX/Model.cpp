@@ -16,7 +16,6 @@ int Model::numOfModels = 0;
 	name = "Model_" + std::to_string(numOfModels);
 	type = modelName;//u can change type name using setter
 	numOfModels++;
-
 }
 
  Model::Model(std::string path, std::string texPath, std::string modelName, std::string vShader, std::string fShader, std::string gShader)
@@ -33,7 +32,6 @@ int Model::numOfModels = 0;
 	 name = "Model_" + std::to_string(numOfModels);
 	 type = modelName;//u can change type name using setter
 	 numOfModels++;
-	 
  }
 
 void Model::draw()

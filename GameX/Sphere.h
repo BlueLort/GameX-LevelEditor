@@ -31,6 +31,10 @@ public:
 	 Sphere() { init(); };
 	 ~Sphere();
 	 static int numOfSpheres;
+
+	 inline const std::vector<Vertex>& getVertices() const { return _vertices; }
+	 inline const std::vector<unsigned int>& getIndices() const { return _indices; }
+
 private:
 
 	

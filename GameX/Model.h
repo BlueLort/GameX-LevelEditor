@@ -6,7 +6,8 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <thread>
-class Model :public PhysicalObject
+
+class Model : public PhysicalObject
 {
 public:
 	/*  Functions   */
@@ -26,6 +27,7 @@ private:
 	/*  Model Data  */
 	std::vector<Mesh> meshes;
 	std::string loadPathTextures;
+	
 	/*  Functions   */
 	void init() override {};//EMPTY
 	void uploadToBuffers() override {};//EMPTY

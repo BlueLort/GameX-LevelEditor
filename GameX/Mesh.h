@@ -6,6 +6,11 @@
 #include <SDL/SDL.h>
 #include <GL/glew.h>
 #include <iostream>
+#include <map>
+#include "HalfEdge.h"
+#include "HENode.h"
+#include "HEVertex.h"
+
 class Mesh {
 public:
 	/*  Mesh Data  */

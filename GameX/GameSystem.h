@@ -27,6 +27,7 @@
 #include "LightLamp.h"
 #include "Plane.h"
 #include "Water.h"
+#include "NavMesh.h"
 
 
 enum class GameState{PLAY,EXIT};
@@ -61,7 +62,9 @@ private:
 	ModelSelector * _modelSelector;
 	InputKeeper * _inputKeeper;
 	Camera* _camera;
+
 	std::vector<PhysicalObject*> GameObjects;
+
 	//defaults for point light
 	glm::vec3 defaultPlightsValues;
 	glm::vec3 defaultAmbientColor;
@@ -93,6 +96,8 @@ private:
 	void renderScene();
 	void renderSkybox();
 	void renderSelectedObject();
+
+	void ASearch();
 
 	//MOUSE PICKING FUNCTIONS
 	//-------------------------

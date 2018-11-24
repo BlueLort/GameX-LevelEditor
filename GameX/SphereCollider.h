@@ -10,8 +10,6 @@ public:
 	~SphereCollider();
 
 	float getRadius();
-	
-	
 
 	bool isIntersecting(SphereCollider* otherCollider) ;
 	bool isIntersecting(AABBCollider* otherCollider) ;

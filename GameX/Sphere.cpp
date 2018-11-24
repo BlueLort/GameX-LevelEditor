@@ -98,8 +98,10 @@ void Sphere::init()
 	}
 
 	uploadToBuffers();
+	/*
 	nVerts = _indices.size();
 	_vertices.clear();
+	*/
 	//
 }
 
@@ -178,8 +180,8 @@ Sphere::~Sphere()
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);
-	_indices.clear();
 }
+
 void Sphere::uploadToBuffers()
 {
 
