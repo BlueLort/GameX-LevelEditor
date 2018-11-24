@@ -153,6 +153,9 @@
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="GameSystem.cpp" />
     <ClCompile Include="GUI.cpp" />
+    <ClCompile Include="HalfEdge.cpp" />
+    <ClCompile Include="HENode.cpp" />
+    <ClCompile Include="HEVertex.cpp" />
     <ClCompile Include="InputKeeper.cpp" />
     <ClCompile Include="IOManager.cpp" />
     <ClCompile Include="LightLamp.cpp" />
@@ -160,6 +163,7 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelSelector.cpp" />
+    <ClCompile Include="NavMesh.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="RandomGenerator.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -178,12 +182,16 @@
     <ClInclude Include="Collider.h" />
     <ClInclude Include="GameSystem.h" />
     <ClInclude Include="GUI.h" />
+    <ClInclude Include="HalfEdge.h" />
+    <ClInclude Include="HENode.h" />
+    <ClInclude Include="HEVertex.h" />
     <ClInclude Include="InputKeeper.h" />
     <ClInclude Include="IOManager.h" />
     <ClInclude Include="LightLamp.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelSelector.h" />
+    <ClInclude Include="NavMesh.h" />
     <ClInclude Include="PhysicalObject.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="RandomGenerator.h" />
