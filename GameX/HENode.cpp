@@ -1,16 +1,20 @@
 #include "HENode.h"
 #include "HalfEdge.h"
 
+
 HENode::HENode()
 	: m_Position(glm::vec3(0))
 	, m_Edge(nullptr)
 	, m_IsWalkable(true)
 	, m_Hcost(1e9)
 	, m_Gcost(1e9)
+
 {}
 
 HENode::~HENode()
 {}
+
+
 
 void HENode::SetPosition(const glm::vec3& position)
 {

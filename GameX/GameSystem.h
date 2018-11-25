@@ -227,6 +227,30 @@ private:
 	bool genPlaneOnAction(const CEGUI::EventArgs& e);
 	bool genRandomPlaneOnAction(const CEGUI::EventArgs& e);
 	//---------------------------
+	//---------------------------
+	//Navigation Mesh Settings
+	NavMesh* _navMesh=nullptr;
+	GLuint getStartEndNodes = 0;//triple boolean value 1=start 2=end 0=nothing
+	HENode* startNode = nullptr;
+	HENode* endNode = nullptr;
+	std::vector<HENode*> _nodes;
+	std::vector<HENode*> _pathNodes;
+	CEGUI::FrameWindow* fmw_NavMesh;
+	CEGUI::ToggleButton* chb_hideNavMesh;
+	CEGUI::ToggleButton* chb_includeWater;
+	CEGUI::PushButton* but_genNavMesh;
+	CEGUI::PushButton* but_genPath;
+	CEGUI::PushButton* but_setStart;
+	CEGUI::PushButton* but_setEnd;
+	CEGUI::Editbox* ebx_navMesh_maxHeight;
+	CEGUI::DefaultWindow* lab_time;
+	CEGUI::DefaultWindow* lab_nodes;
+
+	bool genNavMeshOnAction(const CEGUI::EventArgs& e);
+	bool genPathOnAction(const CEGUI::EventArgs& e);
+	bool setStartOnAction(const CEGUI::EventArgs& e);
+	bool setEndOnAction(const CEGUI::EventArgs& e);
+	//---------------------------
 
 
 };

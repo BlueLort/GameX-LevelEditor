@@ -13,7 +13,7 @@ GameSystem::~GameSystem()
 void GameSystem::run()
 {
 	initSystem();
-	ASearch();
+	//ASearch();
 	gameLoop();
 }
 
@@ -229,6 +229,28 @@ void GameSystem::initGUI()
 	//keep water hidden by default
 	chb_hideWater->setSelected(true);
 	 //---------------------------
+	 //Navigation Mesh Settings
+	 fmw_NavMesh= static_cast<CEGUI::FrameWindow*>(_GUI.getRootWindow()->getChild("fmw_NavMesh"));
+	 chb_hideNavMesh = static_cast<CEGUI::ToggleButton*>(_GUI.getRootWindow()->getChild("fmw_NavMesh/chb_hideNavMesh"));
+	 chb_includeWater = static_cast<CEGUI::ToggleButton*>(_GUI.getRootWindow()->getChild("fmw_NavMesh/chb_includeWater"));
+	 but_genNavMesh = static_cast<CEGUI::PushButton*>(_GUI.getRootWindow()->getChild("fmw_NavMesh/but_genNavMesh"));
+	 but_genPath = static_cast<CEGUI::PushButton*>(_GUI.getRootWindow()->getChild("fmw_NavMesh/but_genPath"));
+	 but_setStart = static_cast<CEGUI::PushButton*>(_GUI.getRootWindow()->getChild("fmw_NavMesh/but_setStart"));
+	 but_setEnd = static_cast<CEGUI::PushButton*>(_GUI.getRootWindow()->getChild("fmw_NavMesh/but_setEnd"));
+	 ebx_navMesh_maxHeight = static_cast<CEGUI::Editbox*>(_GUI.getRootWindow()->getChild("fmw_NavMesh/ebx_maxHeight"));
+	 lab_time = static_cast<CEGUI::DefaultWindow*>(_GUI.getRootWindow()->getChild("fmw_NavMesh/lab_time"));
+	 lab_nodes = static_cast<CEGUI::DefaultWindow*>(_GUI.getRootWindow()->getChild("fmw_NavMesh/lab_nodes"));
+
+	 but_genNavMesh->subscribeEvent(CEGUI::PushButton::EventMouseClick,
+		 CEGUI::Event::Subscriber(&GameSystem::genNavMeshOnAction, this));
+	 but_genPath->subscribeEvent(CEGUI::PushButton::EventMouseClick,
+		 CEGUI::Event::Subscriber(&GameSystem::genPathOnAction, this));
+	 but_setStart->subscribeEvent(CEGUI::PushButton::EventMouseClick,
+		 CEGUI::Event::Subscriber(&GameSystem::setStartOnAction, this));
+	 but_setEnd->subscribeEvent(CEGUI::PushButton::EventMouseClick,
+		 CEGUI::Event::Subscriber(&GameSystem::setEndOnAction, this));
+	 ebx_navMesh_maxHeight->setText("1.0");
+	//---------------------------
 
 
 }
@@ -607,8 +629,6 @@ void GameSystem::processInput(float DeltaTime)
 					_camera->ProcessKeyboard(Camera_Movement::RIGHT, DeltaTime);
 				}
 
-				int x, y;
-				SDL_GetMouseState(&x, &y);
 
 				
 				if (_inputKeeper->isKeyHeld(SDLK_UP)) {
@@ -627,7 +647,8 @@ void GameSystem::processInput(float DeltaTime)
 				
 				if (_inputKeeper->isKeyHeld(SDLK_LSHIFT)||_inputKeeper->isKeyHeld(SDL_BUTTON_RIGHT))
 				{
-					_camera->ProcessMouseMovement(x, y, DeltaTime);
+					glm::vec2 mousePos = _inputKeeper->getMousePosition();
+					_camera->ProcessMouseMovement(mousePos.x, mousePos.y, DeltaTime);
 				}
 				else
 				{
@@ -655,7 +676,19 @@ void GameSystem::processMousePick(float DeltaTime)
 	glm::vec3 mouseWorldDir = _modelSelector->getMouseWorldDirection();
 	_selectedObject = nullptr;//if i didnt pick a object nullptr the selected object(Deselect)
 	Ray* _RAY = new Ray(Camera::getInstance()->getPosition(), mouseWorldDir);
-
+	if (getStartEndNodes) {
+		switch (getStartEndNodes)
+		{
+		case 1:
+			startNode = _navMesh->GetNodeByRay(_RAY);
+			break;
+		case 2:
+			endNode = _navMesh->GetNodeByRay(_RAY);
+			break;
+		}
+		getStartEndNodes = 0;
+		return;
+	}
 	for (PhysicalObject* p : GameObjects) {
 	
 		if (dynamic_cast<Sphere*>(p)) {
@@ -733,6 +766,8 @@ void GameSystem::renderGame()
 		renderSelectedObject();
 		//draw kind of mask around selected object instad of using stencil buffer
 	}
+
+	
 
 	//RENDER SKYBOX LAST
 	//check if the box !=nullptr or the textureID==0
@@ -830,7 +865,11 @@ void GameSystem::renderScene()
 	renderShadowMap();
 	renderGame();
 	if (sceneWater != nullptr && !chb_hideWater->isSelected())renderWater();
-	
+	if (_navMesh != nullptr&&!chb_hideNavMesh->isSelected()) {
+		glEnable(GL_BLEND);
+		_navMesh->render();
+		glDisable(GL_BLEND);
+	}
 	renderGUI();
 	SDL_GL_SwapWindow(_window);
 }
@@ -1427,6 +1466,93 @@ bool GameSystem::genRandomPlaneOnAction(const CEGUI::EventArgs & e)
 	//BECAUSE HEIGHMAP LOADING DOESNT MATCH RANDOM GENERATION SO I LOAD THE RESULT HEIGHTMAP 
 	//SO IF USE SAVES HIS WORK AFTER LOADING HE WILL FIND IT THE SAME WAY IT WAS SAVED
 	scenePlane= new Plane("Default/Plane/Plane", maxHeight, width, depth, width / 2.0f, depth / 2.0f,"res/Levels/RandomGenerator_H_Map.bmp" );
+
+	return true;
+}
+
+bool GameSystem::genNavMeshOnAction(const CEGUI::EventArgs & e)
+{
+	if (scenePlane == nullptr)return false;
+	_navMesh = new NavMesh();
+
+	std::vector<glm::vec3> vertices;
+	vertices.reserve(scenePlane->getVertices().size());
+
+	for (const Vertex& vertex : scenePlane->getVertices())
+	{
+		vertices.emplace_back(vertex.position);
+	}
+	_navMesh->Generate(vertices, scenePlane->getIndices());
+	_nodes = _navMesh->GetNodes();
+	bool includeWater = chb_includeWater->isSelected();
+	float maxHeight = std::stof(ebx_navMesh_maxHeight->getText().c_str());
+	int maxNodes = _nodes.size();
+	glm::vec3 lastNormal = glm::vec3(0.0f, 1.0f, 0.0f);//UP VECTOR
+	float maxAngleDiff = 50;//in degrees
+	float minHeight = -0.4;//max depth under water if excluded
+	for (unsigned int i = 0; i < maxNodes; i++) {
+		std::vector<HEVertex*> node_Verts=_nodes[i]->GetVertices();
+		glm::vec3 line1 = node_Verts[1]->GetPosition() - node_Verts[0]->GetPosition();
+		glm::vec3 line2 = node_Verts[2]->GetPosition() - node_Verts[0]->GetPosition();
+		glm::vec3 norm = glm::normalize(glm::cross(line1, line2));
+
+		//EXCLUDE NON SMOOTH SURFACES
+		if (acosf( glm::dot( lastNormal ,norm ))*(180/FULL_PI) > maxAngleDiff) {
+			_nodes[i]->SetIsWalkable(false);
+			continue;
+		}
+		///UNCOMMENT TO CHANGE NORMAL ON EACH GOOD TRIANGLE
+		//lastNormal = norm;
+
+		//IF USER DOESNT WANT AREA UNDER WATER TO BE WALKABLE EXCLUDE UNDER WATER AREAS
+		//WATER IS FIXED AT 0.0f IN THE EDITOR SO I CAN CHECK EACH VERTEX OF TRIANGLE IF UNDER THAT HEIGHT EXCLUDE
+		//BUT INSTEAD I WILL USE A BIT DEEPER VALUE TO MAKE IT OKAY TO WALK BY WATER
+		if (!includeWater) {
+			if (node_Verts[0]->GetPosition().y < minHeight || node_Verts[1]->GetPosition().y < minHeight || node_Verts[2]->GetPosition().y < minHeight) {
+				_nodes[i]->SetIsWalkable(false);
+				continue;
+			}
+		}
+		for (PhysicalObject* p : GameObjects) {
+			if (dynamic_cast<Sphere*>(p)) {
+				if (static_cast<SphereCollider*>(p->getCollider())->isIntersecting(_nodes[i]->GetCollider())) {
+					_nodes[i]->SetIsWalkable(false);
+				}
+			}
+			else {//100% model OR BOX(AABB COllider )
+				if (static_cast<AABBCollider*>(p->getCollider())->isIntersecting(_nodes[i]->GetCollider())) {
+					_nodes[i]->SetIsWalkable(false);
+					
+				}
+			}
+		}
+		
+		
+	}
+	_navMesh->uploadToBuffer();//prepare vaos to render (WALKABLE AND UNWALKABLE AREAS)
+	return true;
+}
+
+bool GameSystem::genPathOnAction(const CEGUI::EventArgs & e)
+{
+	if (scenePlane == nullptr || startNode == nullptr || endNode == nullptr)return false;
+	_pathNodes=_navMesh->FindPath(startNode, endNode);
+	printf("%d\n", _pathNodes.size());
+	_navMesh->uploadToBuffer();//prepare vaos to render (PATH AREA)
+	return true;
+}
+
+bool GameSystem::setStartOnAction(const CEGUI::EventArgs & e)
+{
+	if (scenePlane == nullptr)return false;
+	getStartEndNodes = 1;
+	return true;
+}
+
+bool GameSystem::setEndOnAction(const CEGUI::EventArgs & e)
+{
+	if (scenePlane == nullptr)return false;
+	getStartEndNodes = 2;
 	return true;
 }
 

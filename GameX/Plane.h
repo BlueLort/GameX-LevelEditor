@@ -25,6 +25,8 @@ public:
 	float getMaxHeight() { return _maxHeight; }
 	float getWidth() { return _width; }
 	float getDepth() { return _depth; }
+	std::vector<Vertex> getVertices() { return _vertices; }
+	std::vector<unsigned int> getIndices() { return _indices; }
 	Shader* getShader() { return &shader; }
 	std::string getHeightMapPath() { return hMapPath; }
 	RandomGenerator* getRGen() { return rgen; }

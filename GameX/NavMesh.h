@@ -25,20 +25,28 @@ class NavMesh
 {
 private:
 	std::vector<HENode*> m_Nodes;
+	Shader*         m_Shader;
+	GLuint			m_VAO_WALKABLE;
+	GLuint			m_VAO_UNWALKABLE;
+	GLuint			m_VAO_PATH;
 	std::map< int, HEVertex* > m_Vertices;
 	std::map< std::pair< int, int >, HalfEdge*> m_Edges;
-
+	std::vector<HENode*> m_PathNodes;
+	std::vector<glm::vec3>						m_renderVertices_WALKABLE;
+	std::vector<glm::vec3>						m_renderVertices_UNWALKABLE;
+	std::vector<glm::vec3>						m_renderVertices_PATH;
 public:
 	NavMesh();
+	void uploadToBuffer();
 	~NavMesh();
 
 	void Generate(const std::vector<glm::vec3>& vertices, 
 		          const std::vector<unsigned int>& indices);
-
+	void render();
 	void Reset();
-
 	HENode* GetNodeByRay(Ray* ray);
-	
+
+
 	float GetDistance(HENode* start, HENode* end);
 
 	std::vector<HENode*> FindPath(HENode* start, HENode* end);

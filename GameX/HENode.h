@@ -10,6 +10,7 @@ class HalfEdge;
 class HENode
 {
 private:
+	
 	glm::vec3       m_Position;
 	HENode*			m_Parent;
 	HalfEdge       *m_Edge;
@@ -21,7 +22,6 @@ private:
 public:
 	HENode();
 	~HENode();
-	
 	std::vector<HENode*> GetWalkableNeighbors();
 	std::vector<HEVertex*> GetVertices();
 

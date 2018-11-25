@@ -3,10 +3,77 @@
 #include <map>
 #include <set>
 
-NavMesh::NavMesh()
+NavMesh::NavMesh():
+	m_Shader(new Shader("Shaders/Default/NavMesh/NavMesh.vs", "Shaders/Default/NavMesh/NavMesh.frag"))
+,	m_VAO_WALKABLE(0)
+, m_VAO_UNWALKABLE(0)
+, m_VAO_PATH(0)
 {
 }
 
+
+void NavMesh::uploadToBuffer()
+{
+	//TO DO CONFIGURE RESERVE FOR EACH VECTOR
+	for (HENode* _n : m_Nodes) {
+		if (_n->IsWalkable()) {
+			m_renderVertices_WALKABLE.emplace_back(_n->GetVertices()[0]->GetPosition());
+			m_renderVertices_WALKABLE.emplace_back(_n->GetVertices()[1]->GetPosition());
+			m_renderVertices_WALKABLE.emplace_back(_n->GetVertices()[2]->GetPosition());
+		}
+		else {
+			m_renderVertices_UNWALKABLE.emplace_back(_n->GetVertices()[0]->GetPosition());
+			m_renderVertices_UNWALKABLE.emplace_back(_n->GetVertices()[1]->GetPosition());
+			m_renderVertices_UNWALKABLE.emplace_back(_n->GetVertices()[2]->GetPosition());
+		}
+	}
+	for (HENode* _n : m_PathNodes) {
+		m_renderVertices_PATH.emplace_back(_n->GetVertices()[0]->GetPosition());
+		m_renderVertices_PATH.emplace_back(_n->GetVertices()[1]->GetPosition());
+		m_renderVertices_PATH.emplace_back(_n->GetVertices()[2]->GetPosition());
+	}
+
+	GLuint VBO_WALKABLE, VBO_UNWALKABLE, VBO_PATH;
+	glGenVertexArrays(1, &m_VAO_WALKABLE);
+	glGenBuffers(1, &VBO_WALKABLE);
+	glBindVertexArray(m_VAO_WALKABLE);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_WALKABLE);
+
+	// reserving buffer memory for walkable area
+	glBufferData(GL_ARRAY_BUFFER, m_renderVertices_WALKABLE.size() * sizeof(glm::vec3), &m_renderVertices_WALKABLE[0], GL_DYNAMIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	///UNWALKABLE AREA
+	if (m_renderVertices_UNWALKABLE.size()>0) {
+	glGenVertexArrays(1, &m_VAO_UNWALKABLE);
+	glGenBuffers(1, &VBO_UNWALKABLE);
+	glBindVertexArray(m_VAO_UNWALKABLE);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_UNWALKABLE);
+
+	// reserving buffer memory for unwalkable area
+	glBufferData(GL_ARRAY_BUFFER, m_renderVertices_UNWALKABLE.size() * sizeof(glm::vec3), &m_renderVertices_UNWALKABLE[0],GL_DYNAMIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+		}
+	if (m_PathNodes.size()>0) {
+		///PATH AREA
+		glGenVertexArrays(1, &m_VAO_PATH);
+		glGenBuffers(1, &VBO_PATH);
+		glBindVertexArray(m_VAO_PATH);
+
+		glBindBuffer(GL_ARRAY_BUFFER, VBO_PATH);
+
+		// reserving buffer memory for path area
+		glBufferData(GL_ARRAY_BUFFER, m_renderVertices_PATH.size() * sizeof(glm::vec3), &m_renderVertices_PATH[0], GL_DYNAMIC_DRAW);
+
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+	}
+}
 NavMesh::~NavMesh()
 {
 	Reset();
@@ -90,6 +157,38 @@ void NavMesh::Generate(const std::vector<glm::vec3>&    vertices,
 			edge.second->SetOppsite(it->second);
 		}
 	}
+
+}
+
+void NavMesh::render()
+{
+	m_Shader->use();
+	glm::mat4 model;
+	model = glm::translate(model, glm::vec3(0.0f, 0.05f, 0.0f));// a bit shifted (to show plane below it)
+	m_Shader->setVec3("viewPos", Camera::getInstance()->Position);
+	m_Shader->setMat4("projection", Camera::getInstance()->getProjMatrix());
+	m_Shader->setMat4("view", Camera::getInstance()->getViewMatrix());
+	m_Shader->setMat4("model", model);
+	//WALKABLE
+	m_Shader->setVec3("col", glm::vec3(0.0f,1.0f,0.0f));
+	glBindVertexArray(m_VAO_WALKABLE);
+	glDrawArrays(GL_TRIANGLES, 0, m_renderVertices_WALKABLE.size());
+	glBindVertexArray(0);
+	//UNWALKABLE
+	m_Shader->setVec3("col", glm::vec3(1.0f, 0.0f, 0.0f));
+	glBindVertexArray(m_VAO_UNWALKABLE);
+	glDrawArrays(GL_TRIANGLES, 0, m_renderVertices_UNWALKABLE.size());
+	glBindVertexArray(0);
+	//PATH
+	 model=glm::mat4();
+	model = glm::translate(model, glm::vec3(0.0f, 0.08f, 0.0f));// shift over walkable cause all of its cells walkable
+	m_Shader->setMat4("model", model);
+	m_Shader->setVec3("col", glm::vec3(0.0f, 0.0f, 1.0f));
+	glBindVertexArray(m_VAO_PATH);
+	glDrawArrays(GL_TRIANGLES, 0, m_renderVertices_PATH.size());
+	glBindVertexArray(0);
+	Shader::Stop();
+
 }
 
 void NavMesh::Reset()
@@ -219,6 +318,6 @@ std::vector<HENode*> NavMesh::FindPath(HENode* start, HENode* end)
 	path.push_back(start);
 
 	std::reverse(path.begin(), path.end());
-
+	m_PathNodes = path;
 	return path;
 }

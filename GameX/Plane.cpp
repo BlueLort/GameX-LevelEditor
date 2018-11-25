@@ -39,7 +39,6 @@ void Plane::init()
 		}
 		
 	}
-	
 	uploadToBuffers();
 	//_hMapValues.clear();
 }
@@ -72,16 +71,7 @@ Plane::Plane()
 
 Plane::~Plane()
 {
-	if (rgen != nullptr) {
-		delete rgen;
-		rgen = nullptr;
-	}
-	_hMapValues.clear();
-	_vertices.clear();
-	_indices.clear();
-	glDeleteVertexArrays(1, &_VAO);
-	glDeleteBuffers(1, &_VBO);
-	glDeleteBuffers(1, &_EBO);
+	
 
 
 }
@@ -133,7 +123,16 @@ void Plane::preInit(std::string shaderName)
 
 void Plane::destroy()
 {
-	
+	if (rgen != nullptr) {
+		delete rgen;
+		rgen = nullptr;
+	}
+	_hMapValues.clear();
+	_vertices.clear();
+	_indices.clear();
+	glDeleteVertexArrays(1, &_VAO);
+	glDeleteBuffers(1, &_VBO);
+	glDeleteBuffers(1, &_EBO);
 	shader.destroy();
 	diffTex->destroy();
 	normalTex->destroy();
