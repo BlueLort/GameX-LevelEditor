@@ -1,7 +1,7 @@
 # GameX-LevelEditor
 #### 3D Level Editor in C++ using OpenGL 3.3 - SDL2.0 - CEGUI 0.8.5
-Video:[GameX Level Editor](https://youtu.be/zSfcjB-RDEo).
-Video:[Navigation Mesh Video](https://youtu.be/aZXywPTnU34)
+#### Video:[GameX Level Editor](https://youtu.be/zSfcjB-RDEo).
+#### Video:[Navigation Mesh Video](https://youtu.be/aZXywPTnU34).
 ## I COULD NOT DO THIS PROJECT WITHOUT 
 
 1. Joey de Vries (Learnopengl.com)
