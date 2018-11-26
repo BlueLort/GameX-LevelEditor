@@ -13,7 +13,6 @@ GameSystem::~GameSystem()
 void GameSystem::run()
 {
 	initSystem();
-	//ASearch();
 	gameLoop();
 }
 
@@ -231,25 +230,21 @@ void GameSystem::initGUI()
 	 //---------------------------
 	 //Navigation Mesh Settings
 	 fmw_NavMesh= static_cast<CEGUI::FrameWindow*>(_GUI.getRootWindow()->getChild("fmw_NavMesh"));
+	 chb_disableNavMesh = static_cast<CEGUI::ToggleButton*>(_GUI.getRootWindow()->getChild("fmw_NavMesh/chb_disableNavMesh"));
 	 chb_hideNavMesh = static_cast<CEGUI::ToggleButton*>(_GUI.getRootWindow()->getChild("fmw_NavMesh/chb_hideNavMesh"));
 	 chb_includeWater = static_cast<CEGUI::ToggleButton*>(_GUI.getRootWindow()->getChild("fmw_NavMesh/chb_includeWater"));
-	 but_genNavMesh = static_cast<CEGUI::PushButton*>(_GUI.getRootWindow()->getChild("fmw_NavMesh/but_genNavMesh"));
-	 but_genPath = static_cast<CEGUI::PushButton*>(_GUI.getRootWindow()->getChild("fmw_NavMesh/but_genPath"));
 	 but_setStart = static_cast<CEGUI::PushButton*>(_GUI.getRootWindow()->getChild("fmw_NavMesh/but_setStart"));
 	 but_setEnd = static_cast<CEGUI::PushButton*>(_GUI.getRootWindow()->getChild("fmw_NavMesh/but_setEnd"));
-	 ebx_navMesh_maxHeight = static_cast<CEGUI::Editbox*>(_GUI.getRootWindow()->getChild("fmw_NavMesh/ebx_maxHeight"));
-	 lab_time = static_cast<CEGUI::DefaultWindow*>(_GUI.getRootWindow()->getChild("fmw_NavMesh/lab_time"));
-	 lab_nodes = static_cast<CEGUI::DefaultWindow*>(_GUI.getRootWindow()->getChild("fmw_NavMesh/lab_nodes"));
 
-	 but_genNavMesh->subscribeEvent(CEGUI::PushButton::EventMouseClick,
-		 CEGUI::Event::Subscriber(&GameSystem::genNavMeshOnAction, this));
-	 but_genPath->subscribeEvent(CEGUI::PushButton::EventMouseClick,
-		 CEGUI::Event::Subscriber(&GameSystem::genPathOnAction, this));
+
+	 chb_disableNavMesh->subscribeEvent(CEGUI::PushButton::EventMouseClick,
+		 CEGUI::Event::Subscriber(&GameSystem::disableNavMeshOnAction, this));
 	 but_setStart->subscribeEvent(CEGUI::PushButton::EventMouseClick,
 		 CEGUI::Event::Subscriber(&GameSystem::setStartOnAction, this));
 	 but_setEnd->subscribeEvent(CEGUI::PushButton::EventMouseClick,
 		 CEGUI::Event::Subscriber(&GameSystem::setEndOnAction, this));
-	 ebx_navMesh_maxHeight->setText("1.0");
+	 chb_hideNavMesh->setSelected(true);
+	 chb_disableNavMesh->setSelected(true);
 	//---------------------------
 
 
@@ -561,6 +556,7 @@ void GameSystem::processInput(float DeltaTime)
 	if (_inputKeeper->isKeyPressed(SDL_BUTTON_RIGHT)) {
 
 		setAllEditBoxNotActive();
+		getStartEndNodes = 0;//deactivate start or end selecting mode(NAV MESH)
 	}
 	
 	if (_inputKeeper->isKeyPressed(SDL_BUTTON_LEFT)) {
@@ -570,8 +566,10 @@ void GameSystem::processInput(float DeltaTime)
 	}
 	if (_inputKeeper->isKeyHeld(SDL_BUTTON_LEFT) && !EditBoxActive && !isInFrameWindowBounds()) {
 		ObjectOnDragging();
-
+	
 	}
+
+	
 	//Cant Move while dragging objects simple solution for now
 	else {
 		if (_inputKeeper->isKeyHeld(SDL_BUTTON_LEFT)) {
@@ -681,12 +679,22 @@ void GameSystem::processMousePick(float DeltaTime)
 		{
 		case 1:
 			startNode = _navMesh->GetNodeByRay(_RAY);
+			if (startNode != nullptr) {
+				_navMesh->SetStartNode(startNode);
+				getStartEndNodes = 0;
+				_navMesh->uploadStart();
+			}
 			break;
 		case 2:
 			endNode = _navMesh->GetNodeByRay(_RAY);
+			if (endNode != nullptr) {
+				_navMesh->SetEndNode(endNode);
+				getStartEndNodes = 0;
+				_navMesh->uploadEnd();
+			}
 			break;
 		}
-		getStartEndNodes = 0;
+		if (!chb_disableNavMesh->isSelected())refreshNavMeshPath();//refresh path if there is any
 		return;
 	}
 	for (PhysicalObject* p : GameObjects) {
@@ -738,9 +746,14 @@ void GameSystem::updateGame(float DeltaTime)
 	for (PhysicalObject* p : GameObjects) {
 		p->update(DeltaTime);
 	}
-
-	
-	
+	static float NavMeshTimer = 0.0f;
+	if (!chb_disableNavMesh->isSelected()) {
+		NavMeshTimer += DeltaTime;
+		if (NavMeshTimer > 2.5f) {//refresh every 2.5f secs
+			refreshNavMesh();
+			NavMeshTimer = 0.0f;
+		}
+	}
 
 }
 
@@ -919,43 +932,6 @@ void GameSystem::renderSelectedObject()
 	Shader::Stop();
 
 }
-
-
-void GameSystem::ASearch()
-{
-	/*
-		node : i am using the vertices and the indices generate from the shpere
-		as the data for the nav mesh
-	*/
-	Sphere* sphere = new Sphere();
-
-	std::vector<glm::vec3> vertices;
-	vertices.reserve(sphere->getVertices().size());
-
-	for (const auto& vertex : sphere->getVertices())
-	{
-		vertices.emplace_back(vertex.position);
-	}
-
-	const std::vector<unsigned int>& indices = sphere->getIndices();
-
-	NavMesh* navMesh = new NavMesh();
-	navMesh->Generate(vertices, indices);
-
-	HENode* start = navMesh->GetNodes().front();
-	HENode* end = navMesh->GetNodes().back();
-
-	std::vector<HENode*> path = navMesh->FindPath(start, end);
-	std::cout << glm::length(start->GetPosition() - end->GetPosition()) << std::endl;
-
-	for (const auto& node : path)
-	{
-		glm::vec3 pos = node->GetPosition();
-		std::cout << "(" << pos.x << ", " << pos.y << ", " << pos.z << ")\n";
-	}
-
-}
-
 void GameSystem::ObjectOnDragging()
 {
 	glm::vec3 mouseOffSet = _modelSelector->getMouseWorldPosOffset();
@@ -974,6 +950,7 @@ void GameSystem::ObjectOnDragging()
 			
 		}
 		displayModelStats();
+
 	}
 }
 
@@ -1044,6 +1021,26 @@ void GameSystem::saveGeneralSettings(std::ofstream& oFile)
 		oFile << " />\n\n";
 	}
 
+
+
+}
+
+void GameSystem::saveNavMesh(std::ofstream & oFile)
+{
+	oFile << "<NavMesh ";
+	for (HENode* _n : _nodes) {
+		if (_n->IsWalkable()) {
+			glm::vec3 position[3];
+			position[0] = _n->GetVertices()[0]->GetPosition();
+			position[1] = _n->GetVertices()[1]->GetPosition();
+			position[2] = _n->GetVertices()[2]->GetPosition();
+			oFile << "(" + getString(position[0].x) + "," + getString(position[0].y) + ","+getString(position[0].z) + ") ";
+			oFile << "(" + getString(position[1].x) + "," + getString(position[1].y) + "," + getString(position[1].z) + ") ";
+			oFile << "(" + getString(position[2].x) + "," + getString(position[2].y) + "," + getString(position[2].z) + ")\n";
+
+		}
+	}
+	oFile << " />\n\n";
 
 
 }
@@ -1336,6 +1333,7 @@ bool GameSystem::placeModelsOnAction(const CEGUI::EventArgs & e)
 		GameObjects.push_back(new Model(modelPath + selectedModel, modelPath, selectedModel, ShaderToUse(), chb_geoShader->isSelected()));
 		GameObjects.back()->setType(selectedModel);
 	}
+	
 	return true;
 }
 
@@ -1347,6 +1345,7 @@ bool GameSystem::saveOnAction(const CEGUI::EventArgs & e)
 	for (PhysicalObject* p : GameObjects) {
 		oFile << p->getInfo();
 	}
+	if (_navMesh != nullptr)saveNavMesh(oFile);
 	oFile.close();
 
 	return true;
@@ -1367,6 +1366,14 @@ bool GameSystem::loadOnAction(const CEGUI::EventArgs & e)
 
 bool GameSystem::newOnAction(const CEGUI::EventArgs & e)
 {
+	if (_navMesh != nullptr) {
+		_navMesh->Reset();
+		delete _navMesh;
+		_navMesh = nullptr;
+		startNode = nullptr;
+		endNode = nullptr;
+		_nodes.clear();
+	}
 	_selectedObject = nullptr;
 	for (PhysicalObject* p : GameObjects) {
 		if (dynamic_cast<LightLamp*>(p)) {
@@ -1448,6 +1455,8 @@ bool GameSystem::genPlaneOnAction(const CEGUI::EventArgs & e)
 	if (sceneWater != nullptr)delete sceneWater;
 	scenePlane = new Plane("Default/Plane/Plane", maxHeight, width, depth, width / 2.0f, depth / 2.0f,heightMapToUse());
 	sceneWater = new Water("Default/Water/Water", width, depth);
+
+	if (!chb_disableNavMesh->isSelected())genNavMesh();//GENERATE SUITABLE NAV MESH
 	return true;
 }
 
@@ -1467,12 +1476,13 @@ bool GameSystem::genRandomPlaneOnAction(const CEGUI::EventArgs & e)
 	//SO IF USE SAVES HIS WORK AFTER LOADING HE WILL FIND IT THE SAME WAY IT WAS SAVED
 	scenePlane= new Plane("Default/Plane/Plane", maxHeight, width, depth, width / 2.0f, depth / 2.0f,"res/Levels/RandomGenerator_H_Map.bmp" );
 
+	if (!chb_disableNavMesh->isSelected())genNavMesh();//GENERATE SUITABLE NAV MESH
 	return true;
 }
 
-bool GameSystem::genNavMeshOnAction(const CEGUI::EventArgs & e)
+void GameSystem::genNavMesh()
 {
-	if (scenePlane == nullptr)return false;
+	if (scenePlane == nullptr)return;
 	_navMesh = new NavMesh();
 
 	std::vector<glm::vec3> vertices;
@@ -1484,23 +1494,30 @@ bool GameSystem::genNavMeshOnAction(const CEGUI::EventArgs & e)
 	}
 	_navMesh->Generate(vertices, scenePlane->getIndices());
 	_nodes = _navMesh->GetNodes();
-	
+	startNode = nullptr;
+	endNode = nullptr;
+	refreshNavMesh();
+}
+
+void GameSystem::refreshNavMesh()
+{
+	if (_navMesh == nullptr)return;
 	bool includeWater = chb_includeWater->isSelected();
-	float maxHeight = std::stof(ebx_navMesh_maxHeight->getText().c_str());
 	int maxNodes = _nodes.size();
 	glm::vec3 lastNormal = glm::vec3(0.0f, 1.0f, 0.0f);//UP VECTOR
 	float maxAngleDiff = 50;//in degrees
 	float minHeight = -0.4;//max depth under water if excluded
 	for (unsigned int i = 0; i < maxNodes; i++) {
-		std::vector<HEVertex*> node_Verts=_nodes[i]->GetVertices();
+		_nodes[i]->SetIsWalkable(true);//RESET NODE WALKABLITY 
+
+		std::vector<HEVertex*> node_Verts = _nodes[i]->GetVertices();
 		glm::vec3 line1 = node_Verts[1]->GetPosition() - node_Verts[0]->GetPosition();
 		glm::vec3 line2 = node_Verts[2]->GetPosition() - node_Verts[0]->GetPosition();
 		glm::vec3 norm = glm::normalize(glm::cross(line1, line2));
 
 		//EXCLUDE NON SMOOTH SURFACES
-		if (acosf( glm::dot( lastNormal ,norm ))*(180/FULL_PI) > maxAngleDiff) {
+		if (acosf(glm::dot(lastNormal, norm))*(180 / FULL_PI) > maxAngleDiff) {
 			_nodes[i]->SetIsWalkable(false);
-			continue;
 		}
 		///UNCOMMENT TO CHANGE NORMAL ON EACH GOOD TRIANGLE
 		//lastNormal = norm;
@@ -1508,39 +1525,53 @@ bool GameSystem::genNavMeshOnAction(const CEGUI::EventArgs & e)
 		//IF USER DOESNT WANT AREA UNDER WATER TO BE WALKABLE EXCLUDE UNDER WATER AREAS
 		//WATER IS FIXED AT 0.0f IN THE EDITOR SO I CAN CHECK EACH VERTEX OF TRIANGLE IF UNDER THAT HEIGHT EXCLUDE
 		//BUT INSTEAD I WILL USE A BIT DEEPER VALUE TO MAKE IT OKAY TO WALK BY WATER
-		if (!includeWater) {
+		if (!includeWater &&_nodes[i]->IsWalkable()) {
 			if (node_Verts[0]->GetPosition().y < minHeight || node_Verts[1]->GetPosition().y < minHeight || node_Verts[2]->GetPosition().y < minHeight) {
 				_nodes[i]->SetIsWalkable(false);
-				continue;
 			}
 		}
-		for (PhysicalObject* p : GameObjects) {
-			if (dynamic_cast<Sphere*>(p)) {
-				if (static_cast<SphereCollider*>(p->getCollider())->isIntersecting(_nodes[i]->GetCollider())) {
-					_nodes[i]->SetIsWalkable(false);
+		if (_nodes[i]->IsWalkable()) {
+			for (PhysicalObject* p : GameObjects) {
+				if (dynamic_cast<Sphere*>(p)) {
+					if (static_cast<SphereCollider*>(p->getCollider())->isIntersecting(_nodes[i]->GetCollider())) {
+						_nodes[i]->SetIsWalkable(false);
+					}
 				}
-			}
-			else {//100% model OR BOX(AABB COllider )
-				if (static_cast<AABBCollider*>(p->getCollider())->isIntersecting(_nodes[i]->GetCollider())) {
-					_nodes[i]->SetIsWalkable(false);
-					
+				else {//100% model OR BOX(AABB COllider )
+					if (static_cast<AABBCollider*>(p->getCollider())->isIntersecting(_nodes[i]->GetCollider())) {
+						_nodes[i]->SetIsWalkable(false);
+					}
 				}
 			}
 		}
-		
-		
+		else {
+			continue;
+		}
 	}
-	
-	_navMesh->uploadToBuffer();//prepare vaos to render (WALKABLE AND UNWALKABLE AREAS)
-	return true;
+
+	_navMesh->uploadWalkAbleUnwalkableAreas();//prepare vaos to render (WALKABLE AND UNWALKABLE AREAS)
+	refreshNavMeshPath();//refresh path if there is any
 }
 
-bool GameSystem::genPathOnAction(const CEGUI::EventArgs & e)
+void GameSystem::refreshNavMeshPath()
 {
-	if (scenePlane == nullptr || startNode == nullptr || endNode == nullptr)return false;
-	_pathNodes=_navMesh->FindPath(startNode, endNode);
-	printf("%d\n", _pathNodes.size());
-	_navMesh->uploadToBuffer();//prepare vaos to render (PATH AREA)
+	if (scenePlane == nullptr || startNode == nullptr || endNode == nullptr)return;
+	_pathNodes = _navMesh->FindPath(startNode, endNode);
+	_navMesh->uploadPathArea();//prepare vaos to render (PATH AREA)
+}
+
+bool GameSystem::disableNavMeshOnAction(const CEGUI::EventArgs & e)
+{
+	if (chb_disableNavMesh->isSelected()) {
+		_navMesh->Reset();
+		delete _navMesh;
+		_navMesh = nullptr;
+		startNode = nullptr;
+		endNode = nullptr;
+		_nodes.clear();
+		return false;
+	}
+	genNavMesh();
 	return true;
 }
 

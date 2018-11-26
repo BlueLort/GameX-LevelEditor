@@ -97,7 +97,6 @@ private:
 	void renderSkybox();
 	void renderSelectedObject();
 
-	void ASearch();
 
 	//MOUSE PICKING FUNCTIONS
 	//-------------------------
@@ -111,7 +110,6 @@ private:
 
 	std::string SaveLoadPath;
 
-	void saveGeneralSettings(std::ofstream& oFile);
 
 	std::map<std::string, std::string> comboBox_Models;
 	std::map<std::string, TexturePathSTRUCT> comboBox_Textures;
@@ -178,6 +176,9 @@ private:
 	CEGUI::PushButton* but_load;
 	CEGUI::PushButton* but_new;
 
+
+	void saveGeneralSettings(std::ofstream& oFile);
+	void saveNavMesh(std::ofstream& oFile);
 	bool saveOnAction(const CEGUI::EventArgs& e);
 	bool loadOnAction(const CEGUI::EventArgs& e);
 	bool newOnAction(const CEGUI::EventArgs& e);
@@ -237,17 +238,15 @@ private:
 	std::vector<HENode*> _pathNodes;
 	CEGUI::FrameWindow* fmw_NavMesh;
 	CEGUI::ToggleButton* chb_hideNavMesh;
+	CEGUI::ToggleButton* chb_disableNavMesh;
 	CEGUI::ToggleButton* chb_includeWater;
-	CEGUI::PushButton* but_genNavMesh;
-	CEGUI::PushButton* but_genPath;
 	CEGUI::PushButton* but_setStart;
 	CEGUI::PushButton* but_setEnd;
-	CEGUI::Editbox* ebx_navMesh_maxHeight;
-	CEGUI::DefaultWindow* lab_time;
-	CEGUI::DefaultWindow* lab_nodes;
 
-	bool genNavMeshOnAction(const CEGUI::EventArgs& e);
-	bool genPathOnAction(const CEGUI::EventArgs& e);
+	void genNavMesh();
+	void refreshNavMesh();
+	void refreshNavMeshPath();
+	bool disableNavMeshOnAction(const CEGUI::EventArgs& e);
 	bool setStartOnAction(const CEGUI::EventArgs& e);
 	bool setEndOnAction(const CEGUI::EventArgs& e);
 	//---------------------------

@@ -6,82 +6,162 @@
 
 NavMesh::NavMesh():
 	m_Shader(new Shader("Shaders/Default/NavMesh/NavMesh.vs", "Shaders/Default/NavMesh/NavMesh.frag"))
-,	m_VAO_WALKABLE(0)
-, m_VAO_UNWALKABLE(0)
-, m_VAO_PATH(0)
+	,m_startNode(nullptr),m_endNode(nullptr)
 {
+	m_VAO[0] = 0; m_VAO[1] = 0; m_VAO[2] = 0; m_VAO[3] = 0; m_VAO[4] = 0;
+	m_renderPartitions[0] = 0; m_renderPartitions[1] = 0;
 }
-
-
-void NavMesh::uploadToBuffer()
+void NavMesh::uploadWalkAbleUnwalkableAreas()
 {
-	//TO DO CONFIGURE RESERVE FOR EACH VECTOR
+	if (m_VAO[0] || m_VAO[1]) {
+		glDeleteVertexArrays(2, m_VAO);
+		m_renderPartitions[0] = 0;
+		m_renderPartitions[1] = 0;
+		m_VAO[0] = 0; m_VAO[1] = 0; m_VAO[2] = 0;
+	}
+	m_renderVertices.clear();
+	m_renderVertices.reserve(3 * (m_Nodes.size() + m_PathNodes.size()));
 	for (HENode* _n : m_Nodes) {
 		if (_n->IsWalkable()) {
-			m_renderVertices_WALKABLE.emplace_back(_n->GetVertices()[0]->GetPosition());
-			m_renderVertices_WALKABLE.emplace_back(_n->GetVertices()[1]->GetPosition());
-			m_renderVertices_WALKABLE.emplace_back(_n->GetVertices()[2]->GetPosition());
-		}
-		else {
-			m_renderVertices_UNWALKABLE.emplace_back(_n->GetVertices()[0]->GetPosition());
-			m_renderVertices_UNWALKABLE.emplace_back(_n->GetVertices()[1]->GetPosition());
-			m_renderVertices_UNWALKABLE.emplace_back(_n->GetVertices()[2]->GetPosition());
+			m_renderVertices.emplace_back(_n->GetVertices()[0]->GetPosition());
+			m_renderVertices.emplace_back(_n->GetVertices()[1]->GetPosition());
+			m_renderVertices.emplace_back(_n->GetVertices()[2]->GetPosition());
 		}
 	}
-
-	m_renderVertices_PATH.clear();
-
-	for (HENode* _n : m_PathNodes) {
-		m_renderVertices_PATH.emplace_back(_n->GetVertices()[0]->GetPosition());
-		m_renderVertices_PATH.emplace_back(_n->GetVertices()[1]->GetPosition());
-		m_renderVertices_PATH.emplace_back(_n->GetVertices()[2]->GetPosition());
+	m_renderPartitions[0] = m_renderVertices.size();
+	for (HENode* const _n : m_Nodes) {
+		if (!_n->IsWalkable()) {
+			m_renderVertices.emplace_back(_n->GetVertices()[0]->GetPosition());
+			m_renderVertices.emplace_back(_n->GetVertices()[1]->GetPosition());
+			m_renderVertices.emplace_back(_n->GetVertices()[2]->GetPosition());
+		}
 	}
+	m_renderPartitions[1] = m_renderVertices.size();
+	GLuint VBO[2];
 
-	GLuint VBO_WALKABLE, VBO_UNWALKABLE, VBO_PATH;
-	glGenVertexArrays(1, &m_VAO_WALKABLE);
-	glGenBuffers(1, &VBO_WALKABLE);
-	glBindVertexArray(m_VAO_WALKABLE);
+	glGenVertexArrays(2, m_VAO);
+	glGenBuffers(2, VBO);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_WALKABLE);
+	///WALKABLE AREA
+	glBindVertexArray(m_VAO[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
 
 	// reserving buffer memory for walkable area
-	glBufferData(GL_ARRAY_BUFFER, m_renderVertices_WALKABLE.size() * sizeof(glm::vec3), &m_renderVertices_WALKABLE[0], GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, m_renderPartitions[0] * sizeof(glm::vec3), &m_renderVertices[0], GL_DYNAMIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	///UNWALKABLE AREA
-	if (m_renderVertices_UNWALKABLE.size()>0) {
-	glGenVertexArrays(1, &m_VAO_UNWALKABLE);
-	glGenBuffers(1, &VBO_UNWALKABLE);
-	glBindVertexArray(m_VAO_UNWALKABLE);
+	if (m_renderPartitions[0] != m_renderVertices.size()) {
+		///UNWALKABLE AREA
+		glBindVertexArray(m_VAO[1]);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_UNWALKABLE);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
 
-	// reserving buffer memory for unwalkable area
-	glBufferData(GL_ARRAY_BUFFER, m_renderVertices_UNWALKABLE.size() * sizeof(glm::vec3), &m_renderVertices_UNWALKABLE[0],GL_DYNAMIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-		}
-	if (m_PathNodes.size()>0) {
-		///PATH AREA
-		glGenVertexArrays(1, &m_VAO_PATH);
-		glGenBuffers(1, &VBO_PATH);
-		glBindVertexArray(m_VAO_PATH);
-
-		glBindBuffer(GL_ARRAY_BUFFER, VBO_PATH);
-
-		// reserving buffer memory for path area
-		glBufferData(GL_ARRAY_BUFFER, m_renderVertices_PATH.size() * sizeof(glm::vec3), &m_renderVertices_PATH[0], GL_DYNAMIC_DRAW);
+		// reserving buffer memory for unwalkable area
+		glBufferData(GL_ARRAY_BUFFER, (m_renderPartitions[1] - m_renderPartitions[0]) * sizeof(glm::vec3), &m_renderVertices[m_renderPartitions[0]], GL_DYNAMIC_DRAW);
 
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
 	}
+
+}
+void NavMesh::uploadPathArea()
+{
+	if (m_VAO[2]) {
+		glDeleteVertexArrays(1, &m_VAO[2]);
+		 m_VAO[2] = 0;
+
+	}
+	m_renderVertices.erase(m_renderVertices.begin() + m_renderPartitions[1], m_renderVertices.end());//erase last path
+	for (HENode* _n : m_PathNodes) {
+		m_renderVertices.emplace_back(_n->GetVertices()[0]->GetPosition());
+		m_renderVertices.emplace_back(_n->GetVertices()[1]->GetPosition());
+		m_renderVertices.emplace_back(_n->GetVertices()[2]->GetPosition());
+	}
+	GLuint VBO;
+
+	glGenVertexArrays(1, &m_VAO[2]);
+	glGenBuffers(1, &VBO);
+
+	if (m_renderPartitions[1] != m_renderVertices.size()) {
+		///PATH AREA
+		glBindVertexArray(m_VAO[2]);
+
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+		// reserving buffer memory for path area
+		glBufferData(GL_ARRAY_BUFFER, (m_renderVertices.size() - m_renderPartitions[1]) * sizeof(glm::vec3), &m_renderVertices[m_renderPartitions[1]], GL_DYNAMIC_DRAW);
+
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+	}
+
+}
+void NavMesh::uploadStart()
+{
+	if (m_VAO[3]) {
+		glDeleteVertexArrays(1, &m_VAO[3]);
+		m_VAO[3] = 0;
+	}
+
+
+	if (m_startNode != nullptr) {
+		m_startEndVertices[0] = m_startNode->GetVertices()[0]->GetPosition();
+		m_startEndVertices[1] = m_startNode->GetVertices()[1]->GetPosition();
+		m_startEndVertices[2] = m_startNode->GetVertices()[2]->GetPosition();
+
+		GLuint VBO;
+
+		glGenVertexArrays(1, &m_VAO[3]);
+		glGenBuffers(1, &VBO);
+
+		glBindVertexArray(m_VAO[3]);
+
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+		// reserving buffer memory for path area
+		glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(glm::vec3), &m_startEndVertices[0], GL_DYNAMIC_DRAW);
+
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+	}
+
+}
+void NavMesh::uploadEnd()
+{
+	if (m_VAO[4]) {
+		glDeleteVertexArrays(1, &m_VAO[4]);
+		m_VAO[4] = 0;
+	}
+	if (m_endNode != nullptr) {
+		m_startEndVertices[3] = m_endNode->GetVertices()[0]->GetPosition();
+		m_startEndVertices[4] = m_endNode->GetVertices()[1]->GetPosition();
+		m_startEndVertices[5] = m_endNode->GetVertices()[2]->GetPosition();
+
+		GLuint VBO;
+
+		glGenVertexArrays(1, &m_VAO[4]);
+		glGenBuffers(1, &VBO);
+		glBindVertexArray(m_VAO[4]);
+
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+		// reserving buffer memory for path area
+		glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(glm::vec3), &m_startEndVertices[3], GL_DYNAMIC_DRAW);
+
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+	}
+
 }
 NavMesh::~NavMesh()
 {
 	Reset();
 }
+
+void NavMesh::SetStartNode(HENode * n) { m_startNode = n; }
+
+void NavMesh::SetEndNode(HENode * n) { m_endNode = n; }
 
 void NavMesh::Generate(const std::vector<glm::vec3>&    vertices,
 					   const std::vector<unsigned int>& indices)
@@ -146,7 +226,7 @@ void NavMesh::Generate(const std::vector<glm::vec3>&    vertices,
 		// Getting the inner sphere radius of the current node
 		float area2 = glm::length(glm::cross(ab, ac));
 		float radius = area2 / (glm::length(ab) + glm::length(ac) + glm::length(bc));
-
+		radius *= 1.3;//a bit bigger radius to make selecting easier
 		SphereCollider* collider = new SphereCollider(position, radius);
 		node->SetCollider(collider);
 	}
@@ -174,27 +254,45 @@ void NavMesh::render()
 	m_Shader->setMat4("model", model);
 	//WALKABLE
 	m_Shader->setVec3("col", glm::vec3(0.0f,1.0f,0.0f));
-	glBindVertexArray(m_VAO_WALKABLE);
-	glDrawArrays(GL_TRIANGLES, 0, m_renderVertices_WALKABLE.size());
+	glBindVertexArray(m_VAO[0]);
+	glDrawArrays(GL_TRIANGLES, 0, m_renderPartitions[0]);
 	glBindVertexArray(0);
 	//UNWALKABLE
 	m_Shader->setVec3("col", glm::vec3(1.0f, 0.0f, 0.0f));
-	glBindVertexArray(m_VAO_UNWALKABLE);
-	glDrawArrays(GL_TRIANGLES, 0, m_renderVertices_UNWALKABLE.size());
+	glBindVertexArray(m_VAO[1]);
+	glDrawArrays(GL_TRIANGLES, 0, (m_renderPartitions[1] - m_renderPartitions[0]));
 	glBindVertexArray(0);
 	//PATH
 	 model=glm::mat4();
 	model = glm::translate(model, glm::vec3(0.0f, 0.08f, 0.0f));// shift over walkable cause all of its cells walkable
 	m_Shader->setMat4("model", model);
 	m_Shader->setVec3("col", glm::vec3(0.0f, 0.0f, 1.0f));
-	glBindVertexArray(m_VAO_PATH);
-	glDrawArrays(GL_TRIANGLES, 0, m_renderVertices_PATH.size());
+	glBindVertexArray(m_VAO[2]);
+	glDrawArrays(GL_TRIANGLES, 0, (m_renderVertices.size()-m_renderPartitions[1]));
 	glBindVertexArray(0);
+	//Start AND END
+	//START NODE
+	model = glm::mat4();
+	model = glm::translate(model, glm::vec3(0.0f, 0.1f, 0.0f));// shift over PATH and WALKABLE
+	m_Shader->setMat4("model", model);
+	m_Shader->setVec3("col", glm::vec3(1.0f, .0f, 1.0f));
+	glBindVertexArray(m_VAO[3]);
+	glDrawArrays(GL_TRIANGLES, 0,3);
+	glBindVertexArray(0);
+	//END NODE
+	m_Shader->setVec3("col", glm::vec3(0.0f, 1.0f, 1.0f));
+	glBindVertexArray(m_VAO[4]);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glBindVertexArray(0);
+
 	Shader::Stop();
 }
 
 void NavMesh::Reset()
 {
+	m_startNode = nullptr;
+	m_endNode = nullptr;
+	m_renderVertices.clear();
 	for (auto node : m_Nodes)
 	{
 		delete node;
@@ -232,7 +330,7 @@ HENode* NavMesh::GetNodeByRay(Ray* ray)
 
 	for (const auto& node : m_Nodes)
 	{
-		if (node->GetCollider()->isIntersecting(ray))
+		if (node->GetCollider()->isIntersecting(ray)&&node->IsWalkable())//usually we pick walkable nodes
 		{
 			target = node;
 			break;

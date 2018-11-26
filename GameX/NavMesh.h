@@ -25,20 +25,24 @@ class NavMesh
 private:
 	std::vector<HENode*> m_Nodes;
 	Shader*         m_Shader;
-	GLuint			m_VAO_WALKABLE;
-	GLuint			m_VAO_UNWALKABLE;
-	GLuint			m_VAO_PATH;
+	GLuint			m_VAO[5];//3 vaos for unwalkable walkable and path areas 2 for start and end nodes
 	std::map< int, HEVertex* > m_Vertices;
 	std::map< std::pair< int, int >, HalfEdge*> m_Edges;
 	std::vector<HENode*> m_PathNodes;
-	std::vector<glm::vec3>						m_renderVertices_WALKABLE;
-	std::vector<glm::vec3>						m_renderVertices_UNWALKABLE;
-	std::vector<glm::vec3>						m_renderVertices_PATH;
+	std::vector<glm::vec3>						m_renderVertices;
+	glm::vec3									m_startEndVertices[6];
+	GLuint										m_renderPartitions[2];//start of unwalkable nodes and start of path nodes
+	HENode*										m_startNode;
+	HENode*										m_endNode;
 public:
 	NavMesh();
-	void uploadToBuffer();
+	void uploadWalkAbleUnwalkableAreas();
+	void uploadPathArea();
+	void uploadStart();
+	void uploadEnd();
 	~NavMesh();
-
+	void SetStartNode(HENode* n);
+	void SetEndNode(HENode* n);
 	void Generate(const std::vector<glm::vec3>& vertices, 
 		          const std::vector<unsigned int>& indices);
 	void render();

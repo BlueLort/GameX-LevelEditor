@@ -942,7 +942,7 @@
             </Window>
         </Window>
         <Window type="AlfiskoSkin/FrameWindow" name="fmw_NavMesh" >
-            <Property name="Area" value="{{0,9},{0,332},{0.3,-120},{0.3,417}}" />
+            <Property name="Area" value="{{0,9},{0,332},{0.3,-120},{0.3,309}}" />
             <Property name="Text" value="Nav. Mesh Settings" />
             <Property name="Alpha" value="0.9" />
             <Property name="RollUpState" value="true" />
@@ -960,40 +960,18 @@
             <AutoWindow namePath="__auto_closebutton__" >
                 <Property name="TooltipText" value="Save or Load a Scene" />
             </AutoWindow>
-            <Window type="AlfiskoSkin/Button" name="but_genNavMesh" >
-                <Property name="ID" value="1" />
-                <Property name="Area" value="{{0,18},{0,30},{0,227},{0,55}}" />
-                <Property name="Font" value="Jura-13" />
-                <Property name="Text" value="Generate Nav. Mesh" />
-                <Property name="TooltipText" value="Updates Model Stats with Current Put Stats" />
-                <Property name="InheritsTooltipText" value="false" />
-                <Property name="AutoRenderingSurface" value="true" />
-            </Window>
-            <Window type="AlfiskoSkin/Label" name="lab_maxHeight" >
-                <Property name="Area" value="{{0,20},{0,4},{0,121},{0,25}}" />
-                <Property name="Font" value="Jura-13" />
-                <Property name="Text" value="Max Height:" />
-                <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                <Property name="InheritsTooltipText" value="false" />
-            </Window>
-            <Window type="AlfiskoSkin/Editbox" name="ebx_maxHeight" >
-                <Property name="Area" value="{{0,124},{0,6},{0,212},{0,26}}" />
-                <Property name="Font" value="Jura-10" />
-                <Property name="ValidationString" value="[-+]?[0-9]*\.?[0-9]*" />
-                <Property name="InheritsTooltipText" value="false" />
-            </Window>
             <Window type="AlfiskoSkin/Checkbox" name="chb_includeWater" >
-                <Property name="Area" value="{{0,21},{0,57},{0,148},{0,78}}" />
+                <Property name="Area" value="{{0,16},{0,34},{0,143},{0,55}}" />
                 <Property name="Text" value="Include Water" />
                 <Property name="TooltipText" value="Plane / Water Settings" />
             </Window>
             <Window type="AlfiskoSkin/Checkbox" name="chb_hideNavMesh" >
-                <Property name="Area" value="{{0,21},{0,81},{0,148},{0,102}}" />
+                <Property name="Area" value="{{0,16},{0,57},{0,143},{0,78}}" />
                 <Property name="Text" value="Hide Nav. Mesh" />
                 <Property name="TooltipText" value="Plane / Water Settings" />
             </Window>
             <Window type="AlfiskoSkin/Label" name="lab_bestPath" >
-                <Property name="Area" value="{{0,15},{0,107},{0,234},{0,130}}" />
+                <Property name="Area" value="{{0,14},{0,85},{0,233},{0,108}}" />
                 <Property name="Font" value="Jura-13" />
                 <Property name="Text" value="Best Path" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
@@ -1001,7 +979,7 @@
             </Window>
             <Window type="AlfiskoSkin/Button" name="but_setStart" >
                 <Property name="ID" value="1" />
-                <Property name="Area" value="{{0,14},{0,141},{0,110},{0,166}}" />
+                <Property name="Area" value="{{0,18},{0,115},{0,114},{0,140}}" />
                 <Property name="Font" value="Jura-13" />
                 <Property name="Text" value="Set Start" />
                 <Property name="InheritsTooltipText" value="false" />
@@ -1009,34 +987,16 @@
             </Window>
             <Window type="AlfiskoSkin/Button" name="but_setEnd" >
                 <Property name="ID" value="1" />
-                <Property name="Area" value="{{0,127},{0,141},{0,223},{0,166}}" />
+                <Property name="Area" value="{{0,137},{0,116},{0,233},{0,141}}" />
                 <Property name="Font" value="Jura-13" />
                 <Property name="Text" value="Set End" />
                 <Property name="InheritsTooltipText" value="false" />
                 <Property name="AutoRenderingSurface" value="true" />
             </Window>
-            <Window type="AlfiskoSkin/Button" name="but_genPath" >
-                <Property name="ID" value="1" />
-                <Property name="Area" value="{{0,13},{0,174},{0,222},{0,199}}" />
-                <Property name="Font" value="Jura-13" />
-                <Property name="Text" value="Generate Path" />
-                <Property name="TooltipText" value="Updates Model Stats with Current Put Stats" />
-                <Property name="InheritsTooltipText" value="false" />
-                <Property name="AutoRenderingSurface" value="true" />
-            </Window>
-            <Window type="AlfiskoSkin/Label" name="lab_time" >
-                <Property name="Area" value="{{0,15},{0,206},{0,78},{0,227}}" />
-                <Property name="Font" value="Jura-13" />
-                <Property name="Text" value="Time:" />
-                <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                <Property name="InheritsTooltipText" value="false" />
-            </Window>
-            <Window type="AlfiskoSkin/Label" name="lab_nodes" >
-                <Property name="Area" value="{{0,13},{0,231},{0,75},{0,252}}" />
-                <Property name="Font" value="Jura-13" />
-                <Property name="Text" value="Nodes:" />
-                <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                <Property name="InheritsTooltipText" value="false" />
+            <Window type="AlfiskoSkin/Checkbox" name="chb_disableNavMesh" >
+                <Property name="Area" value="{{0,16},{0,8},{0,161},{0,29}}" />
+                <Property name="Text" value="Disable Nav. Mesh" />
+                <Property name="TooltipText" value="Plane / Water Settings" />
             </Window>
         </Window>
     </Window>
