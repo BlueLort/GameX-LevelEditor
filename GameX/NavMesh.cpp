@@ -2,6 +2,7 @@
 #include <climits>
 #include <map>
 #include <set>
+#include <algorithm>
 
 NavMesh::NavMesh():
 	m_Shader(new Shader("Shaders/Default/NavMesh/NavMesh.vs", "Shaders/Default/NavMesh/NavMesh.frag"))
@@ -27,6 +28,9 @@ void NavMesh::uploadToBuffer()
 			m_renderVertices_UNWALKABLE.emplace_back(_n->GetVertices()[2]->GetPosition());
 		}
 	}
+
+	m_renderVertices_PATH.clear();
+
 	for (HENode* _n : m_PathNodes) {
 		m_renderVertices_PATH.emplace_back(_n->GetVertices()[0]->GetPosition());
 		m_renderVertices_PATH.emplace_back(_n->GetVertices()[1]->GetPosition());
@@ -118,7 +122,6 @@ void NavMesh::Generate(const std::vector<glm::vec3>&    vertices,
 		
 		position /= 3;
 
-		node->SetIsWalkable(true);
 		node->SetPosition(position);
 		node->SetHalfEdge(edge[0]);
 
@@ -135,20 +138,20 @@ void NavMesh::Generate(const std::vector<glm::vec3>&    vertices,
 
 			m_Edges[std::make_pair(indices[i + j], indices[i + ((j + 1) % 3)])] = edge[j];
 		}
-
+		
 		glm::vec3 ab = vertex[0]->GetPosition() - vertex[1]->GetPosition();
 		glm::vec3 ac = vertex[0]->GetPosition() - vertex[2]->GetPosition();
 		glm::vec3 bc = vertex[2]->GetPosition() - vertex[1]->GetPosition();
-
+		
 		// Getting the inner sphere radius of the current node
 		float area2 = glm::length(glm::cross(ab, ac));
 		float radius = area2 / (glm::length(ab) + glm::length(ac) + glm::length(bc));
-		
+
 		SphereCollider* collider = new SphereCollider(position, radius);
 		node->SetCollider(collider);
 	}
 
-	for (auto edge : m_Edges)
+	for (const auto& edge : m_Edges)
 	{
 		auto it = m_Edges.find(std::make_pair(edge.first.second, edge.first.first));
 		
@@ -188,12 +191,11 @@ void NavMesh::render()
 	glDrawArrays(GL_TRIANGLES, 0, m_renderVertices_PATH.size());
 	glBindVertexArray(0);
 	Shader::Stop();
-
 }
 
 void NavMesh::Reset()
 {
-	for (auto& node : m_Nodes)
+	for (auto node : m_Nodes)
 	{
 		delete node;
 	}
@@ -250,74 +252,80 @@ float NavMesh::GetDistance(HENode* start, HENode* end)
 
 std::vector<HENode*> NavMesh::FindPath(HENode* start, HENode* end)
 {
+	std::swap(start, end);
+
 	if (!start->IsWalkable() || !end->IsWalkable())
 	{
 		return std::vector<HENode*>();
 	}
 
-	for (const auto& node : m_Nodes)
-	{
-		node->SetGCost(std::numeric_limits<float>::infinity());
-		node->SetHCost(std::numeric_limits<float>::infinity());
-	}
+	HENode::AdvanceQuery();
 
 	start->SetGCost(0);
 	start->SetHCost(0);
 
-	std::set<HENode*, Compare> open, closed;
+	std::multiset<HENode*, Compare> open;
 	open.insert(start);
+
+	bool found = false;
 
 	while (!open.empty())
 	{
 		auto it = open.begin();
 		HENode* current = (*it);
-		closed.insert(current);
+		current->SetProcessed();
 		open.erase(it);
 		
 		if (current == end)
 		{
+			found = true;
 			break;
 		}
 
 		for (auto neighbour : current->GetWalkableNeighbors())
 		{
-			if (closed.find(neighbour) != closed.end())
+			if (neighbour->IsProcessed())
 			{
 				continue;
 			}
-
+			
 			float distanceToNeighbor = GetDistance(current, neighbour);
 			float distanceToGoal = GetDistance(current, end);
 
+			bool inOpenSet = open.find(neighbour) != open.end();
+
 			if (current->GetGCost() + distanceToNeighbor < neighbour->GetGCost() || 
-				open.find(neighbour) == open.end())
+				!inOpenSet)
 			{
 				neighbour->SetGCost(current->GetGCost() + distanceToNeighbor);
 				neighbour->SetHCost(distanceToGoal);
 
 				neighbour->SetParent(current);
 
-				if (open.find(neighbour) == open.end())
+				if (!inOpenSet)
 				{
 					open.insert(neighbour);
 				}
 			}
 		}
 	}
-
+	
 	std::vector<HENode*> path;
 
-	HENode* current = end;
-
-	while (current != start)
+	if (found)
 	{
-		path.emplace_back(current);
-		current = current->GetParent();
+		HENode* current = end;
+
+		while (current != start)
+		{
+			path.emplace_back(current);
+			current = current->GetParent();
+		}
+
+		path.push_back(start);
 	}
 
-	path.push_back(start);
-
-	std::reverse(path.begin(), path.end());
 	m_PathNodes = path;
+	
 	return path;
 }

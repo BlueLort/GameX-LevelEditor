@@ -1,13 +1,17 @@
 #include "HENode.h"
 #include "HalfEdge.h"
 
+unsigned long long HENode::s_CurrentQueryID = 0;
 
 HENode::HENode()
 	: m_Position(glm::vec3(0))
+	, m_Parent(nullptr)
 	, m_Edge(nullptr)
 	, m_IsWalkable(true)
-	, m_Hcost(1e9)
-	, m_Gcost(1e9)
+	, m_Hcost(0)
+	, m_Gcost(0)
+	, m_Collider(nullptr)
+	, m_QueryID(0)
 
 {}
 
@@ -58,7 +62,7 @@ std::vector<HENode*> HENode::GetWalkableNeighbors()
 	HalfEdge* start = GetHalfEdge();
 	HalfEdge* current = start;
 	
-	do 
+	do
 	{
 		HalfEdge* opposite = current->GetOpposite();
 		

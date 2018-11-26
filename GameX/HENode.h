@@ -10,14 +10,15 @@ class HalfEdge;
 class HENode
 {
 private:
-	
-	glm::vec3       m_Position;
-	HENode*			m_Parent;
-	HalfEdge       *m_Edge;
-	bool	        m_IsWalkable;
-	float	        m_Hcost;
-	float		    m_Gcost;
-	SphereCollider *m_Collider;
+	glm::vec3        	m_Position;
+	HENode             *m_Parent;
+	HalfEdge       	   *m_Edge;
+	bool	        	m_IsWalkable;
+	float	        	m_Hcost;
+	float		    	m_Gcost;
+	unsigned long long  m_QueryID;
+	SphereCollider     *m_Collider;
+	static unsigned long long  s_CurrentQueryID;
 
 public:
 	HENode();
@@ -32,6 +33,7 @@ public:
 	void SetHCost(int hcost);
 	void SetGCost(int gcost);
 	void SetCollider(SphereCollider* collider);
+	inline void SetProcessed() { m_QueryID = s_CurrentQueryID; }
 
 	inline const glm::vec3& GetPosition()  const { return m_Position;        }
 	inline HENode*			GetParent()	   const { return m_Parent;			 }
@@ -41,4 +43,7 @@ public:
 	inline const float&		GetGCost()     const { return m_Gcost;           }
 	inline const float		GetFCost()     const { return m_Hcost + m_Gcost; }
 	inline SphereCollider*  GetCollider()  const { return m_Collider;        }
+
+	inline bool IsProcessed() const { return m_QueryID == s_CurrentQueryID; }
+	inline static void AdvanceQuery() { ++s_CurrentQueryID; }
 };

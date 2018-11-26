@@ -1484,6 +1484,7 @@ bool GameSystem::genNavMeshOnAction(const CEGUI::EventArgs & e)
 	}
 	_navMesh->Generate(vertices, scenePlane->getIndices());
 	_nodes = _navMesh->GetNodes();
+	
 	bool includeWater = chb_includeWater->isSelected();
 	float maxHeight = std::stof(ebx_navMesh_maxHeight->getText().c_str());
 	int maxNodes = _nodes.size();
@@ -1529,6 +1530,7 @@ bool GameSystem::genNavMeshOnAction(const CEGUI::EventArgs & e)
 		
 		
 	}
+	
 	_navMesh->uploadToBuffer();//prepare vaos to render (WALKABLE AND UNWALKABLE AREAS)
 	return true;
 }

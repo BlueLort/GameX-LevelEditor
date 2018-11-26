@@ -10,13 +10,12 @@
 
 struct Compare
 {
-	bool operator()(const HENode* lhs, const HENode* rhs) const
+	bool operator()(HENode* lhs, HENode* rhs) const
 	{
 		if (lhs->GetFCost() == rhs->GetFCost())
 		{
 			return lhs->GetHCost() < rhs->GetHCost();
 		}
-
 		return lhs->GetFCost() < rhs->GetFCost();
 	}
 };
@@ -45,7 +44,6 @@ public:
 	void render();
 	void Reset();
 	HENode* GetNodeByRay(Ray* ray);
-
 
 	float GetDistance(HENode* start, HENode* end);
 
