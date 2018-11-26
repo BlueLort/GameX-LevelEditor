@@ -22,6 +22,7 @@ Video:[GameX Level Editor](https://youtu.be/zSfcjB-RDEo).
 - Add your custom shaders/textures.
 - There are hotkeys to control the software easily.
 - Water is hidden by default but its generated with terrain width and depth.
+- Make Navigation Mesh and Test Shortest Path using A* Algorithm.
 ## WHY THIS SOFTWARE MIGHT NOT BE YOUR CHOICE ?
 - This level editor is done using forward shading which is heavy on performance(in a scene with alot of lights) but easy to implement and easy for beginners to try different shaders on their levels easily.
 - Moving the camera is by arrows and WASD (that will be improved on next update or so).
