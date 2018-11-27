@@ -14,7 +14,7 @@
 4. MakingGamesWithBen(youtube.com/user/makinggameswithben)
    - CEGUI Tutorials.
 5. Eng/Ahmed Tolba (github:AndreAhmed)
-   - kept answering questions if anything goes wrong.
+   - kept answering questions if anything goes wrong(specifically Nav. Mesh Feature).
 
 ## WHAT CAN THIS SOFTWARE DO?
 - Place any 3D Model (in any orientation or scale) or use one of the preset models like Box and Sphere to make your level and add levels to your own 3D game.
