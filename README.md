@@ -47,6 +47,3 @@
 9. Random Generator needs some tweaks.
 10. Multithreading for Assimp and Heavy Tasks like generating random terrain.
 #### if you know anything that might help me or improve the project email me emaranasr@gmail.com with subject "GameXLevelEditor Fix"
-
-## WHY THIS PROJECT IS NOT FULLY DONE ?
-i got bored after a period of time and college put me under a lot of pressure.
