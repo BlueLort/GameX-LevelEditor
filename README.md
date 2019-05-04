@@ -2,19 +2,6 @@
 #### 3D Level Editor in C++ using OpenGL 3.3 - SDL2.0 - CEGUI 0.8.5
 #### Video:[GameX Level Editor](https://youtu.be/zSfcjB-RDEo).
 #### Video:[Navigation Mesh Video](https://youtu.be/aZXywPTnU34).
-## I COULD NOT DO THIS PROJECT WITHOUT 
-
-1. Joey de Vries (Learnopengl.com)
-   - i couldn't understand how to use opengl without learnopengl.com
-(you might find some of my classes follows learnopengl.com syntax).
-2. ThinMatrix (youtube.com/user/ThinMatrix)
-   - Water & Procedural Terrain Tutorials were nice.
-3. redblobgames.com
-   - Procedural Terrain Perfectly explained.
-4. MakingGamesWithBen(youtube.com/user/makinggameswithben)
-   - CEGUI Tutorials.
-5. Eng/Ahmed Tolba (github:AndreAhmed)
-   - kept answering questions if anything goes wrong(specifically Nav. Mesh Feature).
 
 ## WHAT CAN THIS SOFTWARE DO?
 - Place any 3D Model (in any orientation or scale) or use one of the preset models like Box and Sphere to make your level and add levels to your own 3D game.
